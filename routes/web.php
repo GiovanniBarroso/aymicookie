@@ -11,6 +11,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/test', function () {
+    return view('test');
+});
+
 // Agrupar rutas CRUD en un middleware (opcional)
 Route::middleware(['web'])->group(function () {
     Route::resource('users', UserController::class);
@@ -23,3 +27,7 @@ Route::middleware(['web'])->group(function () {
 Route::fallback(function () {
     return view('errors.404'); // Asegúrate de tener `resources/views/errors/404.blade.php`
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
