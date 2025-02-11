@@ -28,6 +28,6 @@ Route::fallback(function () {
     return view('errors.404'); // Asegúrate de tener `resources/views/errors/404.blade.php`
 });
 
-Auth::routes();
+
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
