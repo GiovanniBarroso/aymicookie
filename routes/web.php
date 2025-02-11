@@ -15,6 +15,10 @@ Route::get('/test', function () {
     return view('test');
 });
 
+Route::get('/home', function () {
+    return view('auth.dashboard');
+})->middleware('auth');
+
 // Agrupar rutas CRUD en un middleware (opcional)
 Route::middleware(['web'])->group(function () {
     Route::resource('users', UserController::class);
