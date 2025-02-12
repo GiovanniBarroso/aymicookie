@@ -15,12 +15,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- Schema mydb
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `aymicookie` DEFAULT CHARACTER SET utf8 ;
+CREATE DATABASE IF NOT EXISTS `aymicookie`;
 USE `aymicookie` ;
 
 -- -----------------------------------------------------
 -- Table `mydb`.`roles`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`roles` (
+CREATE TABLE IF NOT EXISTS `roles` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(50) NOT NULL,
   `descripcion` TEXT NULL DEFAULT NULL,
@@ -31,30 +32,30 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `mydb`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   `apellidos` VARCHAR(100) NOT NULL,
-  `email` VARCHAR(150) NOT NULL,
+  `email` VARCHAR(150) NOT NULL UNIQUE,
   `password` VARCHAR(255) NOT NULL,
   `telefono` VARCHAR(15) NULL DEFAULT NULL,
   `fecha_registro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `roles_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  INDEX `fk_users_roles1_idx` (`roles_id` ASC) VISIBLE,
+  UNIQUE INDEX `email_UNIQUE` (`email`),
+  INDEX `fk_users_roles1_idx` (`roles_id`),
   CONSTRAINT `fk_users_roles1`
     FOREIGN KEY (`roles_id`)
-    REFERENCES `aymicookie`.`roles` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `roles` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`addresses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`addresses` (
+CREATE TABLE IF NOT EXISTS `addresses` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `calle` VARCHAR(255) NOT NULL,
   `ciudad` VARCHAR(100) NOT NULL,
@@ -63,130 +64,129 @@ CREATE TABLE IF NOT EXISTS `aymicookie`.`addresses` (
   `pais` VARCHAR(50) NOT NULL,
   `users_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_addresses_users1_idx` (`users_id` ASC) VISIBLE,
+  INDEX `fk_addresses_users1_idx` (`users_id`),
   CONSTRAINT `fk_addresses_users1`
     FOREIGN KEY (`users_id`)
-    REFERENCES `aymicookie`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `users` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`categories`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`categories` (
+CREATE TABLE IF NOT EXISTS `categories` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   `descripcion` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `nombre_UNIQUE` (`nombre` ASC) VISIBLE)
-ENGINE = InnoDB;
+  UNIQUE INDEX `nombre_UNIQUE` (`nombre`)
+) ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`brands`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`brands` (
+CREATE TABLE IF NOT EXISTS `brands` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   `descripcion` TEXT NULL DEFAULT NULL,
   `brandscol` VARCHAR(45) NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `nombre_UNIQUE` (`nombre` ASC) VISIBLE)
-ENGINE = InnoDB;
+  UNIQUE INDEX `nombre_UNIQUE` (`nombre`)
+) ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`products`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`products` (
+CREATE TABLE IF NOT EXISTS `products` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(100) NOT NULL,
   `descripcion` TEXT NULL DEFAULT NULL,
   `precio` DECIMAL(10,2) NOT NULL,
   `stock` INT NOT NULL DEFAULT 0,
-  `activo` TINYINT(1) NOT NULL DEFAULT '1',
+  `activo` TINYINT(1) NOT NULL DEFAULT 1,
   `categories_id` BIGINT NOT NULL,
   `brands_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_products_categories1_idx` (`categories_id` ASC) VISIBLE,
-  INDEX `fk_products_brands1_idx` (`brands_id` ASC) VISIBLE,
+  INDEX `fk_products_categories1_idx` (`categories_id`),
+  INDEX `fk_products_brands1_idx` (`brands_id`),
   CONSTRAINT `fk_products_categories1`
     FOREIGN KEY (`categories_id`)
-    REFERENCES `aymicookie`.`categories` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `categories` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_products_brands1`
     FOREIGN KEY (`brands_id`)
-    REFERENCES `aymicookie`.`brands` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `brands` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`vouchers`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`vouchers` (
+CREATE TABLE IF NOT EXISTS `vouchers` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `codigo` VARCHAR(50) NOT NULL,
   `descripcion` TEXT NULL DEFAULT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
-  `tipo` ENUM('1', '2', '3') NOT NULL,
-  `activo` TINYINT(1) NOT NULL DEFAULT '1',
+  `tipo` ENUM('Descuento fijo', 'Porcentaje', 'Envío gratis') NOT NULL,
+  `activo` TINYINT(1) NOT NULL DEFAULT 1,
   `fecha_inicio` DATE NOT NULL,
   `fecha_fin` DATE NOT NULL,
   `products_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `codigo_UNIQUE` (`codigo` ASC) VISIBLE,
-  INDEX `fk_vouchers_products1_idx` (`products_id` ASC) VISIBLE,
+  UNIQUE INDEX `codigo_UNIQUE` (`codigo`),
+  INDEX `fk_vouchers_products1_idx` (`products_id`),
   CONSTRAINT `fk_vouchers_products1`
     FOREIGN KEY (`products_id`)
-    REFERENCES `aymicookie`.`products` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `products` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
 -- Table `mydb`.`orders`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`orders` (
+CREATE TABLE IF NOT EXISTS `orders` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `fecha_pedido` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `estado` ENUM('Pendiente', 'Enviado') NOT NULL DEFAULT 'Pendiente',
+  `estado` ENUM('Pendiente', 'Enviado', 'Entregado', 'Cancelado') NOT NULL DEFAULT 'Pendiente',
   `total` DECIMAL(10,2) NOT NULL,
   `addresses_id` BIGINT NOT NULL,
   `users_id` BIGINT NOT NULL,
-  `pay_method` ENUM('Paypal', 'Bizum') NOT NULL,
+  `pay_method` ENUM('Paypal', 'Bizum', 'Tarjeta', 'Transferencia') NOT NULL,
   `vouchers_id` BIGINT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_orders_users1_idx` (`users_id` ASC) VISIBLE,
-  INDEX `fk_orders_addresses1_idx` (`addresses_id` ASC) VISIBLE,
-  INDEX `fk_orders_vouchers1_idx` (`vouchers_id` ASC) VISIBLE,
+  INDEX `fk_orders_users1_idx` (`users_id`),
+  INDEX `fk_orders_addresses1_idx` (`addresses_id`),
+  INDEX `fk_orders_vouchers1_idx` (`vouchers_id`),
   CONSTRAINT `fk_orders_users1`
     FOREIGN KEY (`users_id`)
-    REFERENCES `aymicookie`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `users` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_orders_addresses1`
     FOREIGN KEY (`addresses_id`)
-    REFERENCES `aymicookie`.`addresses` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `addresses` (`id`) 
+    ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_orders_vouchers1`
     FOREIGN KEY (`vouchers_id`)
-    REFERENCES `aymicookie`.`vouchers` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `vouchers` (`id`) 
+    ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`invoices`
+-- Table `invoices`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`invoices` (
+CREATE TABLE IF NOT EXISTS `invoices` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `asunto` VARCHAR(150) NOT NULL,
   `descripcion` TEXT NOT NULL,
@@ -194,140 +194,128 @@ CREATE TABLE IF NOT EXISTS `aymicookie`.`invoices` (
   `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fecha_resolucion` TIMESTAMP NULL DEFAULT NULL,
   `users_id` BIGINT NOT NULL,
-  INDEX `fk_tickets_users1_idx` (`users_id` ASC) VISIBLE,
   PRIMARY KEY (`id`),
+  INDEX `fk_tickets_users1_idx` (`users_id`),
   CONSTRAINT `fk_tickets_users1`
     FOREIGN KEY (`users_id`)
-    REFERENCES `aymicookie`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    REFERENCES `users` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`shoppingcart`
+-- Table `shoppingcart`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`shoppingcart` (
+CREATE TABLE IF NOT EXISTS `shoppingcart` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `estado` ENUM('Pendiente', 'Enviado', 'Pagado') NOT NULL DEFAULT 'Activo',
+  `estado` ENUM('Pendiente', 'Enviado', 'Pagado') NOT NULL DEFAULT 'Pendiente',
   `users_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_shoppingcart_users1_idx` (`users_id` ASC) VISIBLE,
+  INDEX `fk_shoppingcart_users1_idx` (`users_id`),
   CONSTRAINT `fk_shoppingcart_users1`
     FOREIGN KEY (`users_id`)
-    REFERENCES `aymicookie`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    REFERENCES `users` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`discounts`
+-- Table `discounts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`discounts` (
+CREATE TABLE IF NOT EXISTS `discounts` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `codigo` VARCHAR(50) NOT NULL,
   `descripcion` TEXT NULL DEFAULT NULL,
-  `tipo` ENUM('1', '2', '3') NOT NULL,
+  `tipo` ENUM('Porcentaje', 'Fijo', 'Envío Gratis') NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
   `fecha_inicio` DATE NOT NULL,
   `fecha_fin` DATE NOT NULL,
-  `activo` TINYINT(1) NULL DEFAULT '1',
+  `activo` TINYINT(1) NOT NULL DEFAULT 1,
   `products_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`, `products_id`),
-  UNIQUE INDEX `codigo_UNIQUE` (`codigo` ASC) VISIBLE,
-  INDEX `fk_discounts_products1_idx` (`products_id` ASC) VISIBLE,
+  UNIQUE INDEX `codigo_UNIQUE` (`codigo`),
+  INDEX `fk_discounts_products1_idx` (`products_id`),
   CONSTRAINT `fk_discounts_products1`
     FOREIGN KEY (`products_id`)
-    REFERENCES `aymicookie`.`products` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    REFERENCES `products` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`whishlists`
+-- Table `wishlists`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`whishlists` (
+CREATE TABLE IF NOT EXISTS `wishlists` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `fecha_creacion` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `users_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_whishlists_users1_idx` (`users_id` ASC) VISIBLE,
-  CONSTRAINT `fk_whishlists_users1`
+  INDEX `fk_wishlists_users1_idx` (`users_id`),
+  CONSTRAINT `fk_wishlists_users1`
     FOREIGN KEY (`users_id`)
-    REFERENCES `aymicookie`.`users` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    REFERENCES `users` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`images`
+-- Table `images`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`images` (
+CREATE TABLE IF NOT EXISTS `images` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `url` VARCHAR(255) NOT NULL,
   `alt_text` VARCHAR(255) NULL DEFAULT NULL,
-  `products_id` INT NOT NULL,
+  `products_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_images_products1_idx` (`products_id` ASC) VISIBLE,
+  INDEX `fk_images_products1_idx` (`products_id`),
   CONSTRAINT `fk_images_products1`
     FOREIGN KEY (`products_id`)
-    REFERENCES `aymicookie`.`products` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    REFERENCES `products` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`whistlist_products`
+-- Table `wishlist_products`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`whistlist_products` (
+CREATE TABLE IF NOT EXISTS `wishlist_products` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `products_id` BIGINT NOT NULL,
-  `whishlists_id` BIGINT NOT NULL,
+  `wishlists_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_whistlist_products_products1_idx` (`products_id` ASC) VISIBLE,
-  INDEX `fk_whistlist_products_whishlists1_idx` (`whishlists_id` ASC) VISIBLE,
-  CONSTRAINT `fk_whistlist_products_products1`
+  INDEX `fk_wishlist_products_products1_idx` (`products_id`),
+  INDEX `fk_wishlist_products_wishlists1_idx` (`wishlists_id`),
+  CONSTRAINT `fk_wishlist_products_products1`
     FOREIGN KEY (`products_id`)
-    REFERENCES `aymicookie`.`products` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_whistlist_products_whishlists1`
-    FOREIGN KEY (`whishlists_id`)
-    REFERENCES `aymicookie`.`whishlists` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    REFERENCES `products` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_wishlist_products_wishlists1`
+    FOREIGN KEY (`wishlists_id`)
+    REFERENCES `wishlists` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `mydb`.`shopping_cart_products`
+-- Table `shopping_cart_products`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `aymicookie`.`shopping_cart_products` (
+CREATE TABLE IF NOT EXISTS `shopping_cart_products` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `quantity` VARCHAR(45) NOT NULL,
+  `quantity` INT NOT NULL,
   `shoppingcart_id` BIGINT NOT NULL,
   `products_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_shopping_cart_products_shoppingcart1_idx` (`shoppingcart_id` ASC) VISIBLE,
-  INDEX `fk_shopping_cart_products_products1_idx` (`products_id` ASC) VISIBLE,
+  INDEX `fk_shopping_cart_products_shoppingcart1_idx` (`shoppingcart_id`),
+  INDEX `fk_shopping_cart_products_products1_idx` (`products_id`),
   CONSTRAINT `fk_shopping_cart_products_shoppingcart1`
     FOREIGN KEY (`shoppingcart_id`)
-    REFERENCES `aymicookie`.`shoppingcart` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `shoppingcart` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_shopping_cart_products_products1`
     FOREIGN KEY (`products_id`)
-    REFERENCES `aymicookie`.`products` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
+    REFERENCES `products` (`id`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+SHOW TABLES;
