@@ -1,10 +1,10 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductsTable extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('products', function (Blueprint $table) {
@@ -15,6 +15,7 @@ class CreateProductsTable extends Migration
             $table->integer('stock');
             $table->boolean('activo')->default(true);
             $table->foreignId('categories_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('brands_id')->constrained('brands')->onDelete('cascade'); // ✅ Agregar esta línea
             $table->timestamps();
         });
     }
@@ -23,4 +24,4 @@ class CreateProductsTable extends Migration
     {
         Schema::dropIfExists('products');
     }
-}
+};
