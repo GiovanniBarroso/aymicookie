@@ -17,8 +17,8 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
-use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use \App\Http\Middleware\RoleMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -42,8 +42,8 @@ class Kernel extends HttpKernel
         'web' => [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
-            StartSession::class, 
-            AuthenticateSession::class, 
+            StartSession::class,
+            AuthenticateSession::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
