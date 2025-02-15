@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HomeController;
+use App\Http\Middleware\RoleMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,10 +23,10 @@ Auth::routes();
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 })->name('welcome');
 
-Route::get('/dashboard', [HomeController::class, 'index'])->middleware('auth')->name('dashboard');
+Route::get('/home', [HomeController::class, 'index'])->middleware('auth')->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
@@ -42,12 +43,18 @@ Route::middleware(['auth'])->group(function () {
 | Rutas exclusivas para Administradores (roles_id = 1)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:Admin'])->group(function () {
+
+Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('orders', OrderController::class)->except(['store']);
 });
+
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------
