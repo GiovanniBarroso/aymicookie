@@ -40,6 +40,12 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'roles_id');
+    }
     protected function casts(): array
     {
         return [
