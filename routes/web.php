@@ -38,6 +38,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('orders', OrderController::class)->only(['index', 'show', 'store']);
 });
 
+
+
+
+
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Rutas exclusivas para Administradores (roles_id = 1)
