@@ -4,13 +4,13 @@
     <div class="container">
         <h1 class="mb-4">Gestión de Productos</h1>
 
-        <!-- Botón para crear un nuevo producto -->
         <a href="{{ route('products.create') }}" class="btn btn-success mb-3">Añadir Producto</a>
 
-        <table class="table table-bordered">
-            <thead>
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
                 <tr>
                     <th>ID</th>
+                    <th>Imagen</th>
                     <th>Nombre</th>
                     <th>Precio</th>
                     <th>Stock</th>
@@ -23,8 +23,16 @@
                 @foreach ($products as $product)
                     <tr>
                         <td>{{ $product->id }}</td>
+                        <td>
+                            @if ($product->image)
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="Imagen" class="img-thumbnail"
+                                    width="50">
+                            @else
+                                <span class="text-muted">Sin imagen</span>
+                            @endif
+                        </td>
                         <td>{{ $product->nombre }}</td>
-                        <td>{{ $product->precio }} €</td>
+                        <td>{{ number_format($product->precio, 2) }} €</td>
                         <td>{{ $product->stock }}</td>
                         <td>{{ $product->category->nombre }}</td>
                         <td>{{ $product->brand->nombre }}</td>
