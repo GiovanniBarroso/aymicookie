@@ -15,7 +15,8 @@ return new class extends Migration {
             $table->integer('stock');
             $table->boolean('activo')->default(true);
             $table->foreignId('categories_id')->constrained('categories')->onDelete('cascade');
-            $table->foreignId('brands_id')->constrained('brands')->onDelete('cascade'); // ✅ Agregar esta línea
+            $table->foreignId('brands_id')->constrained('brands')->onDelete('cascade');
+            $table->string('image')->nullable(); 
             $table->timestamps();
         });
     }

@@ -50,7 +50,7 @@ class ProductController extends Controller
             'image' => $imagePath
         ]);
 
-        return redirect()->route('admin.products.index')->with('success', 'Producto agregado correctamente');
+        return redirect()->route('products.index')->with('success', 'Producto agregado correctamente');
     }
 
     public function show($id)
