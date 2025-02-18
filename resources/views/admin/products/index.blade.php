@@ -12,6 +12,7 @@
                     <th>ID</th>
                     <th>Imagen</th>
                     <th>Nombre</th>
+                    <th>Descripción</th> 
                     <th>Precio</th>
                     <th>Stock</th>
                     <th>Categoría</th>
@@ -19,19 +20,20 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
+
             <tbody>
                 @foreach ($products as $product)
                     <tr>
                         <td>{{ $product->id }}</td>
                         <td>
                             @if ($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="Imagen" class="img-thumbnail"
-                                    width="50">
+                                <img src="{{ asset('storage/' . $product->image) }}" alt="Imagen" class="img-thumbnail" width="100">
                             @else
                                 <span class="text-muted">Sin imagen</span>
                             @endif
                         </td>
                         <td>{{ $product->nombre }}</td>
+                        <td>{{ Str::limit($product->description, 30, '...') }}</td> 
                         <td>{{ number_format($product->precio, 2) }} €</td>
                         <td>{{ $product->stock }}</td>
                         <td>{{ $product->category->nombre }}</td>
@@ -49,6 +51,7 @@
                     </tr>
                 @endforeach
             </tbody>
+            
         </table>
     </div>
 @endsection

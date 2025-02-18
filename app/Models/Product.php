@@ -13,20 +13,19 @@ class Product extends Model
 
     protected $fillable = [
         'nombre',
-        'descripcion',
+        'description',
         'precio',
         'stock',
         'categories_id',
-        'brands_id'
+        'brands_id',
+        'image'
     ];
 
-    // Relación con Categoría
     public function category()
     {
         return $this->belongsTo(Category::class, 'categories_id');
     }
 
-    // Relación con Marca
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brands_id');

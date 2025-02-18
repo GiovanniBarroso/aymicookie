@@ -25,42 +25,59 @@
 </div>
 
 <div class="mb-3">
-    <label for="descripcion" class="form-label">Descripción</label>
-    <textarea name="descripcion" id="descripcion" class="form-control">{{ old('descripcion', $product->descripcion ?? '') }}</textarea>
+    <label for="description" class="form-label">Descripción</label>
+    <textarea name="description" id="description" class="form-control">{{ old('description', $product->description ?? '') }}</textarea>
+    @error('description')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
 </div>
 
 <div class="mb-3">
     <label for="precio" class="form-label">Precio (€)</label>
     <input type="number" name="precio" id="precio" class="form-control"
         value="{{ old('precio', $product->precio ?? '') }}" step="0.01" required>
+    @error('precio')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
 </div>
 
 <div class="mb-3">
     <label for="stock" class="form-label">Stock</label>
     <input type="number" name="stock" id="stock" class="form-control"
         value="{{ old('stock', $product->stock ?? '') }}" required>
+    @error('stock')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
 </div>
 
 <div class="mb-3">
     <label for="categories_id" class="form-label">Categoría</label>
     <select name="categories_id" id="categories_id" class="form-control" required>
+        <option value="">Selecciona una categoría</option>
         @foreach ($categories as $category)
             <option value="{{ $category->id }}"
-                {{ isset($product) && $category->id == $product->categories_id ? 'selected' : '' }}>
+                {{ old('categories_id', $product->categories_id ?? '') == $category->id ? 'selected' : '' }}>
                 {{ $category->nombre }}
             </option>
         @endforeach
     </select>
+    @error('categories_id')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
 </div>
 
 <div class="mb-3">
     <label for="brands_id" class="form-label">Marca</label>
     <select name="brands_id" id="brands_id" class="form-control" required>
+        <option value="">Selecciona una marca</option>
         @foreach ($brands as $brand)
             <option value="{{ $brand->id }}"
-                {{ isset($product) && $brand->id == $product->brands_id ? 'selected' : '' }}>
+                {{ old('brands_id', $product->brands_id ?? '') == $brand->id ? 'selected' : '' }}>
                 {{ $brand->nombre }}
             </option>
         @endforeach
     </select>
+    @error('brands_id')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
 </div>

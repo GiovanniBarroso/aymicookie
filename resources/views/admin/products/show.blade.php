@@ -9,7 +9,7 @@
                 alt="Imagen del Producto">
         @endif
 
-        <p><strong>Descripción:</strong> {{ $product->descripcion }}</p>
+        <p><strong>Descripción:</strong> {{ $product->description }}</p>
         <p><strong>Precio:</strong> {{ number_format($product->precio, 2) }} €</p>
         <p><strong>Stock:</strong> {{ $product->stock }}</p>
         <p><strong>Categoría:</strong> {{ $product->category->nombre }}</p>

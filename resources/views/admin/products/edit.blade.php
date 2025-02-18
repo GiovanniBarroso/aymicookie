@@ -7,6 +7,7 @@
             @method('PUT')
             @include('admin.products._form')
             <button type="submit" class="btn btn-primary">Actualizar Producto</button>
+            <a href="{{ route('products.index') }}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>
 @endsection
