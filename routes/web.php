@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,18 @@ Route::middleware(['auth'])->group(function () {
     // Rutas accesibles por todos los usuarios autenticados
     Route::resource('orders', OrderController::class)->only(['index', 'show', 'store']);
 });
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Ruta para el carrito
+|--------------------------------------------------------------------------
+*/
+Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
+
+
 
 /*
 |--------------------------------------------------------------------------

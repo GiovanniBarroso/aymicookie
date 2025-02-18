@@ -19,7 +19,7 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $brands = Brand::all();
-        return view('products.create', compact('categories', 'brands'));
+        return view('admin.products.create', compact('create', 'brands'));
     }
 
     public function store(Request $request)
