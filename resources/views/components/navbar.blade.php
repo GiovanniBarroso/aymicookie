@@ -18,7 +18,7 @@
 
         <!-- Menú de navegación a la derecha -->
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#">Nuestra Casa bien bonita</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Nuestra Casa</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
         </ul>
 

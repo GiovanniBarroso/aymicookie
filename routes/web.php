@@ -57,7 +57,7 @@ Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
+Route::middleware(['auth', RoleMiddleware::class . ':1'])->prefix('admin')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
