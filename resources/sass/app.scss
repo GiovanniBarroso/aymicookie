@@ -1,8 +1,16 @@
-// Fonts
-@import url('https://fonts.bunny.net/css?family=Nunito');
-
-// Variables
+// Importar variables y estilos globales
 @import 'variables';
+@import 'global';
+
+// Importar componentes
+@import 'components/navbar';
+@import 'components/footer';
+@import 'components/buttons';
+@import 'components/cards';
+
+// Importar estilos específicos de páginas
+@import 'pages/home';
+@import 'pages/products';
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';

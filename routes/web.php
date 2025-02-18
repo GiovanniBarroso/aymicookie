@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Middleware\RoleMiddleware;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,8 +42,12 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
-
+/*
+|--------------------------------------------------------------------------
+| Ruta para el carrito
+|--------------------------------------------------------------------------
+*/
+Route::get('/carrito', [CartController::class, 'index'])->name('cart.index');
 
 
 
