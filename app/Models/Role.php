@@ -12,7 +12,7 @@ class Role extends Model
     protected $table = 'roles'; // Nombre de la tabla en la BD
 
     protected $fillable = [
-        'nombre',
+        'name',
         'descripcion',
     ];
 }

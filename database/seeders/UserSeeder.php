@@ -12,14 +12,14 @@ class UserSeeder extends Seeder
     {
         User::insert([
             [
-                'nombre' => 'Admin',
+                'name' => 'Admin',
                 'apellidos' => 'Principal',
                 'email' => 'admin@example.com',
                 'password' => Hash::make('password'),
                 'roles_id' => 1,
             ],
             [
-                'nombre' => 'Usuario',
+                'name' => 'Usuario',
                 'apellidos' => 'Demo',
                 'email' => 'user@example.com',
                 'password' => Hash::make('password'),

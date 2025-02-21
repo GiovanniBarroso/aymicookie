@@ -20,6 +20,21 @@
         <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="#">Nuestra Casa</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
+
+            @auth
+                <!-- Si el usuario está autenticado, mostrar Logout -->
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="nav-link btn btn-link text-dark border-0">
+                            Cerrar Sesión
+                        </button>
+                    </form>
+                </li>
+            @else
+                <!-- Si el usuario no está autenticado, mostrar Login -->
+                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a></li>
+            @endauth
         </ul>
 
         <!-- Ícono del carrito de compras -->
