@@ -18,7 +18,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use App\Http\Middleware\RedirectIfAuthenticated;
-use \App\Http\Middleware\RoleMiddleware;
+use App\Http\Middleware\RoleMiddleware;
+use Laravel\Fortify\Http\Middleware\EnsureFrontendRequestsAreStateful; // 🛑 **Faltaba este middleware**
 
 class Kernel extends HttpKernel
 {
@@ -40,6 +41,7 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
+            EnsureFrontendRequestsAreStateful::class, 
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,

@@ -1,20 +1,31 @@
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
+<?php
 
-public function boot()
+namespace App\Providers;
+
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
+
+class RouteServiceProvider extends ServiceProvider
 {
-$this->routes(function () {
-Route::middleware('web')
-->group(base_path('routes/web.php'));
-});
+    /**
+     * The path to the "home" route for your application.
+     *
+     * @var string
+     */
+    public const HOME = '/home';
 
-// Redirigir según el rol después del login
-Route::get('/home', function () {
-if (Auth::check()) {
-return Auth::user()->roles_id == 1
-? Redirect::to('/admin/products')
-: Redirect::to('/user/orders');
-}
-return Redirect::to('/login');
-});
+    /**
+     * Define your route model bindings, pattern filters, etc.
+     */
+    public function boot(): void
+    {
+        $this->routes(function () {
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
+
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('routes/api.php'));
+        });
+    }
 }
