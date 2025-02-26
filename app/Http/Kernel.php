@@ -19,7 +19,7 @@ use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RoleMiddleware;
-use Laravel\Fortify\Http\Middleware\EnsureFrontendRequestsAreStateful; // 🛑 **Faltaba este middleware**
+use Laravel\Fortify\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 class Kernel extends HttpKernel
 {

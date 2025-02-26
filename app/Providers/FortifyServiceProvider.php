@@ -13,6 +13,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 
+
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
@@ -34,47 +35,35 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
 
+        Fortify::redirects('login', '/products');
 
         Fortify::registerView(function () {
             return view('auth.register');
         });
 
-
         Fortify::loginView(function () {
             return view('auth.login');
         });
-
 
         Fortify::verifyEmailView(function () {
             return view('auth.verify');
         });
 
-
         Fortify::requestPasswordResetLinkView(function () {
             return view('auth.forgot-password');
         });
-
 
         Fortify::resetPasswordView(function () {
             return view('auth.reset-password', ['request' => request()]);
         });
 
-
         Fortify::confirmPasswordView(function () {
             return view('auth.confirm-password');
         });
 
-        //Ruta para la vista de autenticación de dos factores
-        // Fortify::twoFactorChallengeView(function () {
-        //     return view('auth.two-factor-challenge');
-        // });
-
-
-
-
+        // Limitar intentos de inicio de sesión
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
-
             return Limit::perMinute(5)->by($throttleKey);
         });
 
