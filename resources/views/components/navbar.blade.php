@@ -1,50 +1,107 @@
-<nav class="navbar navbar-expand-lg bg-light shadow-sm">
+<nav class="navbar navbar-expand-md navbar-dark border-bottom border-info-subtle shadow-sm">
     <div class="container">
-        <!-- Botón de idioma -->
-        <div class="d-flex align-items-center">
-            <a href="#" class="text-dark me-3">ES</a>
-        </div>
-
-        <!-- Menú de navegación a la izquierda -->
-        <ul class="navbar-nav me-auto">
-            <li class="nav-item"><a class="nav-link" href="#">Conócenos</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Productos</a></li>
-        </ul>
-
-        <!-- Logo centrado -->
-        <a class="navbar-brand mx-auto" href="#">
-            <img src="{{ asset('images/logo.png') }}" alt="Ay Mi Cookie" height="50">
+        <a class="navbar-brand" href="{{ url('/') }}">
+            {{ config('app.name', 'Laravel') }}
         </a>
 
-        <!-- Menú de navegación a la derecha -->
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#">Nuestra Casa</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Contáctanos</a></li>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            @auth
-                <!-- Si el usuario está autenticado, mostrar Logout -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+                @guest
+                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                @else
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ Auth::user()->name }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('profile.edit') }}">Edit Profile</a>
+                            <a class="dropdown-item" href="{{ route('profile.password') }}">Update Password</a>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf
+                            </form>
+                        </div>
+                    </li>
+                @endguest
+
+                <!-- Carrito de Compras -->
                 <li class="nav-item">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="nav-link btn btn-link text-dark border-0">
-                            Cerrar Sesión
-                        </button>
-                    </form>
+                    <a href="#" class="nav-link" id="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count" class="badge bg-danger" style="display: none;">0</span>
+                    </a>
                 </li>
-            @else
-                <!-- Si el usuario no está autenticado, mostrar Login -->
-                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a></li>
-            @endauth
-        </ul>
 
-        <!-- Ícono del carrito de compras -->
-        <div class="cart-icon ms-3 position-relative">
-            <a href="{{ route('cart.index') }}" class="text-dark">
-                <i class="fas fa-shopping-cart fa-lg"></i>
-                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
-                    {{ session('cart') ? count(session('cart')) : 0 }}
-                </span>
-            </a>
+            </ul>
         </div>
     </div>
 </nav>
+
+
+
+<!-- Modal para previsualizar el carrito -->
+<div class="modal fade" id="cartPreviewModal" tabindex="-1" aria-labelledby="cartPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartPreviewModalLabel">Carrito de Compras</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="cart-preview-body">
+                <p>Tu carrito está vacío.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ route('cart.index') }}" class="btn btn-primary">Ver Carrito Completo</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    document.getElementById('cart-icon').addEventListener('click', function() {
+        // Abrir el modal de previsualización
+        var myModal = new bootstrap.Modal(document.getElementById('cartPreviewModal'));
+        myModal.show();
+
+        fetch("{{ route('cart.preview') }}")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Verificar la respuesta en la consola
+
+                let cartPreviewBody = document.getElementById('cart-preview-body');
+                let cartCount = document.getElementById('cart-count');
+
+                // Verifica si 'cart' es un objeto y no un array
+                if (Object.keys(data.cart).length > 0) {
+                    // Convertir el objeto cart en un array de productos
+                    let cartItems = Object.keys(data.cart).map(productId => {
+                        let item = data.cart[productId];
+                        return `<p>${item.nombre} x ${item.cantidad} - ${item.precio}€</p>`;
+                    }).join('');
+                    cartPreviewBody.innerHTML = cartItems;
+                    cartCount.innerText = Object.keys(data.cart).length;
+                    cartCount.style.display = 'inline-block';
+                } else {
+                    cartPreviewBody.innerHTML = '<p>Tu carrito está vacío.</p>';
+                    cartCount.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener los productos del carrito:', error);
+                document.getElementById('cart-preview-body').innerHTML =
+                    '<p>No se pudo cargar el carrito.</p>';
+            });
+
+    });
+</script>
