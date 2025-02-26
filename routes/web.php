@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CartController;
 use App\Http\Middleware\RoleMiddleware;
 
 
@@ -41,3 +42,6 @@ Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
 
 // Ruta para que los usuarios normales solo puedan ver productos
 Route::get('/shop', [ProductController::class, 'shop'])->name('products.shop');
+
+// Ruta para que los usuarios puedan ver el Carrito
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
