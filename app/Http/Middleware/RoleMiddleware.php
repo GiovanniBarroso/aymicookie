@@ -11,9 +11,8 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $role)
     {
         if (!Auth::check() || Auth::user()->roles_id != $role) {
-            abort(403, 'Acceso no autorizado');
+            return redirect('/shop')->with('error', 'No tienes permisos para acceder a esta página.');
         }
-
         return $next($request);
     }
 }

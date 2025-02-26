@@ -112,4 +112,13 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Producto eliminado correctamente');
     }
+
+
+
+    public function shop()
+{
+    $products = Product::all(); // Puedes filtrar solo los productos disponibles si quieres
+    return view('shop', compact('products'));
+}
+
 }
