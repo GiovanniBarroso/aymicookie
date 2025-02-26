@@ -20,7 +20,8 @@
 
 <body class="bg-dark">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-dark border-bottom border-info-subtle shadow-sm">
+        @include('components.navbar')
+        {{-- <nav class="navbar navbar-expand-md navbar-dark border-bottom border-info-subtle shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -80,11 +81,13 @@
                     </ul>
                 </div>
             </div>
-        </nav>
+        </nav> --}}
 
         <main class="py-4">
             @yield('content')
         </main>
+
+        @include('components.footer')
     </div>
 </body>
 
