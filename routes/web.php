@@ -41,6 +41,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
 
 
 
+
 // Ruta para que los usuarios normales solo puedan ver productos
 Route::get('/shop', [ProductController::class, 'shop'])->name('products.shop');
 
