@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -12,7 +13,7 @@ use App\Http\Controllers\ContactController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {
@@ -38,6 +39,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('orders', OrderController::class)->except(['store']);
+    Route::get('/panel', [AdminController::class, 'indexPanel'])->name('admin.panel');
 });
 
 
@@ -85,3 +87,10 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 // Ruta para procesar el formulario de contacto
 // Cuando el usuario envía el formulario, se ejecuta el método "send" del ContactController
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+
+Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::get('/users', [UserController::class, 'index'])->name('users');
+Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+Route::get('/brands', [AdminController::class, 'indexBrands'])->name('brands');

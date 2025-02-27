@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Brand;
 
 class AdminController extends Controller
 {
@@ -48,4 +49,16 @@ class AdminController extends Controller
         Product::destroy($id);
         return redirect()->route('admin.products.index')->with('success', 'Producto eliminado.');
     }
+
+    // Panel de administrador
+
+    public function indexPanel() {
+        return view('admin.panel');
+    }
+
+    public function indexBrands() {
+        $brands = Brand::all();
+        return view('admin.brands.index', compact('brands'));
+    }
+
 }
