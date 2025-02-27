@@ -16,8 +16,8 @@
             </div>
 
             <!-- Botones de navegación derecha -->
-            <a class="btn btn-outline-light border-0 me-3 px-3 py-2 fw-bold" role="button" href="#">About us</a>
-            <a class="btn btn-outline-light border-0 px-3 py-2 fw-bold" role="button" href="#">Contact us</a>
+            <a class="btn btn-outline-light border-0 me-3 px-3 py-2 fw-bold" role="button" href="{{ route('about') }}">About us</a>
+            <a class="btn btn-outline-light border-0 px-3 py-2 fw-bold" role="button" href="{{ route('contact') }}">Contact us</a>
         </div>
 
         <!-- Botón hamburguesa para móviles -->
