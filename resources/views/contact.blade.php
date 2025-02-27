@@ -48,12 +48,5 @@
         </div>
     </div>
 
-    <!-- 🔗 BOTÓN DE REDES SOCIALES -->
-    <div class="text-center mt-5">
-        <h3 class="fw-bold text-white">Síguenos en Instagram 📸</h3>
-        <p class="text-white-50">Descubre nuestras últimas creaciones y promociones exclusivas.</p>
-        <a href="#" class="btn btn-warning fw-bold text-dark px-4 py-2">Síguenos en Instagram</a>
-    </div>
-
 </div>
 @endsection
