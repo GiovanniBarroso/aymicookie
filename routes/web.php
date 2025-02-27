@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ContactController;
 
 
 Route::get('/', function () {
@@ -77,5 +78,15 @@ Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->nam
 // Ruta para la página "Sobre Nosotros"
 // Esta ruta muestra la vista about.blade.php a través del AboutController
 Route::get('/about', [AboutController::class, 'index'])->name('about');
+
+
+// Ruta para mostrar la página de contacto
+// Cuando un usuario accede a "/contact", se ejecuta el método "index" del ContactController
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+
+// Ruta para procesar el formulario de contacto
+// Cuando el usuario envía el formulario, se ejecuta el método "send" del ContactController
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
 
 Route::get('/products', [ProductController::class, 'index'])->name('products');

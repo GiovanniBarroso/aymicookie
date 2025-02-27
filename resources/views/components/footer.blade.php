@@ -1,4 +1,4 @@
-<footer class="footer text-white py-4 mt-5" style="background-color: #E85C0D;">
+<footer class="footer text-white py-4" style="background-color: #E85C0D;">
     <div class="container">
         <div class="row">
             <!-- Sección de navegación (Menú) -->
