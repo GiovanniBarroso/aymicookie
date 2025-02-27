@@ -14,39 +14,53 @@
 
 
 <!-- Sección Visión de la Marca -->
-<section class="vision d-flex align-items-center text-center text-white py-5" style="background-color: #8C1C28;">
-    <div class="container">
+<section class="vision d-flex align-items-center text-center text-white" 
+         style="background-color: #8C1C28;">
+    <div class="container mt-5">
         <div class="row">
-            <div class="col-md-6">
-                <img src="{{ asset('images/cookies-stack.png') }}" alt="Galletas" class="img-fluid">
+            <!-- Imagen de las galletas -->
+            <div class="col-md-6 position-relative">
+                <img src="{{ asset('images/stack_of_cookies.png') }}" alt="Galletas" 
+                class="img-fluid position-absolute bottom-0 start-0 w-100"
+                style="height: 100%; width: auto; max-width: 100%; object-fit: contain;">
             </div>
+
+            <!-- Texto de Visión de la Marca -->
             <div class="col-md-6 d-flex align-items-center">
                 <p class="fs-5 fw-bold">
-                    Poner una Explicación de lo que queremos que encuentren en nuestra página, o nuestra visión de marca
-                    <span class="text-warning">(Fuera del Quienes Somos)</span>
+                    En <strong>Ay Mi Cookie</strong>, queremos que cada mordida sea una experiencia inolvidable.  
+                    Creemos en la calidad, el amor por la repostería y la magia de compartir momentos dulces con quienes más queremos.  
+                    <br><br>
+                    Desde cookies clásicas hasta creaciones innovadoras, nuestro objetivo es ofrecerte el mejor sabor con los mejores ingredientes.  
+                    <strong><span class="text-warning">¡Explora nuestras cookies y descubre la felicidad en cada bocado!</span></strong> 🎉<br><br>
                 </p>
             </div>
         </div>
     </div>
 </section>
 
+
 <!-- Sección de Productos Recomendados -->
-<section class="productos d-flex align-items-center text-center text-white py-5" style="background-color: #C62828;">
+<section class="productos d-flex align-items-center text-center text-white py-3" style="background-color: #C62828;">
     <div class="container">
         <div class="row">
             <div class="col-md-6 d-flex align-items-center">
-                <p class="fs-5 fw-bold">
-                    Productos Recomendados y comentar la sección 
-                    <span class="text-warning">"Crea tu propia Cookie"</span> con nuestros ingredientes 
-                    <span class="text-warning">(Personalización de Producto)</span>
+                <p class="fs-5 fw-bold fs-4">
+                    En <strong>Ay Mi Cookie</strong>, queremos que disfrutes de cada galleta como si fuera hecha solo para ti.  
+                    Estamos trabajando en una nueva experiencia donde podrás <span class="text-warning">crear tu propia cookie</span>, 
+                    eligiendo los ingredientes que más te gusten y personalizando cada detalle.  
+                    <br><br>
+                    Muy pronto podrás diseñar la galleta perfecta y hacer tu pedido con sabores únicos.  
+                    <strong>¡Tu imaginación es el límite!</strong> 🍪✨
                 </p>
             </div>
             <div class="col-md-6">
-                <img src="{{ asset('images/cookies-stack-2.png') }}" alt="Galletas" class="img-fluid">
+                <img src="{{ asset('images/cookies_custom.png') }}" alt="Galletas" class="img-fluid">
             </div>
         </div>
     </div>
 </section>
+
 
 @endsection
 
