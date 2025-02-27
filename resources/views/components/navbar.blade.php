@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-md navbar-dark border-bottom border-info-subtle shadow-sm position-relative" style="background-color: #fabc3f;">
     <div class="container d-flex flex-column align-items-center">
-        
+
         <!-- Contenedor del navbar centrado -->
         <div class="d-flex justify-content-center align-items-center w-100">
-            
+
             <!-- Botones de navegación izquierda -->
             <a class="btn btn-outline-light border-0 me-3 px-3 py-2 fw-bold" role="button" href="#">Home</a>
             <a class="btn btn-outline-light border-0 px-3 py-2 fw-bold" role="button" href="/shop">Products</a>
@@ -17,7 +17,7 @@
 
             <!-- Botones de navegación derecha -->
             <a class="btn btn-outline-light border-0 me-3 px-3 py-2 fw-bold" role="button" href="{{ route('about') }}">About us</a>
-            <a class="btn btn-outline-light border-0 px-3 py-2 fw-bold" role="button" href="{{ route('contact') }}">Contact us</a>
+            <a class="btn btn-outline-light border-0 px-3 py-2 fw-bold" role="button" href="">Contact us</a>
         </div>
 
         <!-- Botón hamburguesa para móviles -->

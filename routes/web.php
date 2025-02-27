@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\AboutController;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {
@@ -37,6 +38,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('orders', OrderController::class)->except(['store']);
+    Route::get('/panel', [AdminController::class, 'indexPanel'])->name('admin.panel');
 });
 
 
@@ -76,3 +78,4 @@ Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->nam
 // Esta ruta muestra la vista about.blade.php a través del AboutController
 Route::get('/about', [AboutController::class, 'index'])->name('about');
 
+Route::get('/products', [ProductController::class, 'index'])->name('products');

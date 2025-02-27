@@ -48,4 +48,11 @@ class AdminController extends Controller
         Product::destroy($id);
         return redirect()->route('admin.products.index')->with('success', 'Producto eliminado.');
     }
+
+    // Panel de administrador
+
+    public function indexPanel() {
+        return view('admin.panel');
+    }
+
 }
