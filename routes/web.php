@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\AboutController;
 
 
 Route::get('/', function () {
@@ -67,3 +68,10 @@ Route::middleware('auth')->group(function () {
 
 //Ruta para actualizar la cantidad de productos en el carrito
 Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
+
+
+
+// Ruta para la página "Sobre Nosotros"
+// Esta ruta muestra la vista about.blade.php a través del AboutController
+Route::get('/about', [AboutController::class, 'index'])->name('about');
+
