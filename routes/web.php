@@ -10,6 +10,9 @@ use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
+
 
 
 Route::get('/', function () {
@@ -87,6 +90,18 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 // Ruta para procesar el formulario de contacto
 // Cuando el usuario envía el formulario, se ejecuta el método "send" del ContactController
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['es', 'en'])) {
+        Session::put('locale', $locale);
+        return redirect()->back();
+    }
+})->name('change.lang');
+
+
+
+
 
 
 Route::get('/products', [ProductController::class, 'index'])->name('products');
