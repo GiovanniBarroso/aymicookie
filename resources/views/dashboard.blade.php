@@ -4,16 +4,6 @@
 
 @section('content')
 
-
-
-<p class= "text-white">Idioma actual en sesión: {{ session('locale') }}</p>
-<p class= "text-white">App Locale: {{ app()->getLocale() }}</p>
-<a href="{{ route('change.lang', ['locale' => app()->getLocale() == 'es' ? 'en' : 'es']) }}">
-    {{ __('change_language') }}
-</a>
-
-
-
 <!-- Sección Hero -->
 <section class="hero d-flex flex-column align-items-center justify-content-center text-center text-white position-relative" style="background-color: #FABC3F; height: 90vh; overflow: hidden;">
     <!-- Imagen ajustada al borde inferior y ancho completo -->
@@ -38,10 +28,11 @@
             <!-- Texto de Visión de la Marca -->
             <div class="col-md-6 d-flex align-items-center">
                 <p class="fs-5 fw-bold">
-                    {{ __('vision_intro')}}  
-                    {{ __('vision_details')}}                      <br><br>
-                    {{ __('vision_future')}}
-                    <strong><span class="text-warning">{{ __('explore_cookies')}}</span></strong> 🎉<br><br>
+                    En <strong>Ay Mi Cookie</strong>, queremos que cada mordida sea una experiencia inolvidable.  
+                    Creemos en la calidad, el amor por la repostería y la magia de compartir momentos dulces con quienes más queremos.  
+                    <br><br>
+                    Desde cookies clásicas hasta creaciones innovadoras, nuestro objetivo es ofrecerte el mejor sabor con los mejores ingredientes.  
+                    <strong><span class="text-warning">¡Explora nuestras cookies y descubre la felicidad en cada bocado!</span></strong> 🎉<br><br>
                 </p>
             </div>
         </div>
@@ -55,11 +46,12 @@
         <div class="row">
             <div class="col-md-6 d-flex align-items-center">
                 <p class="fs-5 fw-bold fs-4">
-                    {{ __('custom_cookie_intro')}}  
-                    {{ __('custom_cookie_details')}}  <span class="text-warning">{{ __('create_cookie')}}</span>, {{ __('choose_ingredients')}}
+                    En <strong>Ay Mi Cookie</strong>, queremos que disfrutes de cada galleta como si fuera hecha solo para ti.  
+                    Estamos trabajando en una nueva experiencia donde podrás <span class="text-warning">crear tu propia cookie</span>, 
+                    eligiendo los ingredientes que más te gusten y personalizando cada detalle.  
                     <br><br>
-                    {{ __('design_cookie')}}
-                    <strong>{{ __('unleash_your_imagination')}}</strong> 🍪✨
+                    Muy pronto podrás diseñar la galleta perfecta y hacer tu pedido con sabores únicos.  
+                    <strong>¡Tu imaginación es el límite!</strong> 🍪✨
                 </p>
             </div>
             <div class="col-md-6">
