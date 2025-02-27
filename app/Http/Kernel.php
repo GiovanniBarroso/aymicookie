@@ -20,6 +20,7 @@ use Illuminate\Routing\Middleware\ValidateSignature;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RoleMiddleware;
 use Laravel\Fortify\Http\Middleware\EnsureFrontendRequestsAreStateful;
+use App\Http\Middleware\LanguageMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -33,7 +34,8 @@ class Kernel extends HttpKernel
         ConvertEmptyStringsToNull::class,
         EncryptCookies::class, // 🔹 Asegurar que las cookies se encripten
         AddQueuedCookiesToResponse::class, // 🔹 Manejar cookies antes de la sesión
-        StartSession::class, // 🔥 Asegurar que la sesión se inicie globalmente
+        StartSession::class,// 🔥 Asegurar que la sesión se inicie globalmente
+        LanguageMiddleware::class,
     ];
 
     /**
