@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-md navbar-dark border-bottom border-info-subtle shadow-sm position-relative" style="background-color: #fabc3f;">
     <div class="container d-flex flex-column align-items-center">
-        
+
         <!-- Contenedor del navbar centrado -->
         <div class="d-flex justify-content-center align-items-center w-100">
-            
+
             <!-- Botones de navegación izquierda -->
             <a class="btn btn-outline-light border-0 me-3 px-3 py-2 fw-bold" role="button" href="/dashboard">Home</a>
             <a class="btn btn-outline-light border-0 px-3 py-2 fw-bold" role="button" href="/shop">Products</a>
@@ -41,6 +41,12 @@
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item fw-bold" href="{{ route('profile.edit') }}">Edit Profile</a>
                             <a class="dropdown-item fw-bold" href="{{ route('profile.password') }}">Update Password</a>
+                            <a class="dropdown-item fw-bold" href="">Favourites</a>
+
+                            @if (Auth::user()->roles_id == 1)
+                            <a class="dropdown-item fw-bold" href="{{ route(name: 'admin.panel') }}">Admin Panel</a>
+                            @endif
+
                             <a class="dropdown-item fw-bold" href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>

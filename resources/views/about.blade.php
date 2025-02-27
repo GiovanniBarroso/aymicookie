@@ -7,7 +7,7 @@
 
     <!-- 🔥 SECCIÓN ENCABEZADO -->
     <div class="text-center">
-        <img src="{{ asset('images/logo.png') }}" alt="Ay Mi Cookie" class="img-fluid mb-3" style="max-width: 150px;">
+        <img src="{{ asset('images/logo.png') }}" alt="Ay Mi Cookie" class="img-fluid mb-3" style="max-width: 600px;">
         <h1 class="fw-bold">Sobre Nosotros</h1>
         <p class="lead">
             Creemos en el poder de una buena galleta. 🎉 Horneamos con amor y pasión, 

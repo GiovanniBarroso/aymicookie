@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Session;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {
@@ -41,6 +42,7 @@ Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('orders', OrderController::class)->except(['store']);
+    Route::get('/panel', [AdminController::class, 'indexPanel'])->name('admin.panel');
 });
 
 
@@ -100,3 +102,10 @@ Route::get('lang/{locale}', function ($locale) {
 
 
 
+
+
+Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::get('/users', [UserController::class, 'index'])->name('users');
+Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+Route::get('/brands', [AdminController::class, 'indexBrands'])->name('brands');
