@@ -41,6 +41,12 @@
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item fw-bold" href="{{ route('profile.edit') }}">Edit Profile</a>
                             <a class="dropdown-item fw-bold" href="{{ route('profile.password') }}">Update Password</a>
+                            <a class="dropdown-item fw-bold" href="">Favourites</a>
+
+                            @if (Auth::user()->roles_id == 1)
+                            <a class="dropdown-item fw-bold" href="{{ route(name: 'admin.panel') }}">Admin Panel</a>
+                            @endif
+
                             <a class="dropdown-item fw-bold" href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>

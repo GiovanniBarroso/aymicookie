@@ -21,7 +21,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body class="bg-dark">
+<body style="background-color: #FABC3F">
     <div id="app">
         <!-- Navbar -->
         @include('components.navbar')
