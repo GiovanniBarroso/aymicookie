@@ -5,12 +5,12 @@
         <div class="d-flex justify-content-center align-items-center w-100">
             
             <!-- Botones de navegación izquierda -->
-            <a class="btn btn-outline-light border-0 me-3 px-3 py-2 fw-bold" role="button" href="#">Home</a>
+            <a class="btn btn-outline-light border-0 me-3 px-3 py-2 fw-bold" role="button" href="/dashboard">Home</a>
             <a class="btn btn-outline-light border-0 px-3 py-2 fw-bold" role="button" href="/shop">Products</a>
 
             <!-- Logo centrado -->
             <div class="mx-4">
-                <a href="{{ url('/') }}">
+                <a href="{{ url('/dashboard') }}">
                     <img src="images/logo_aymicookie.png" alt="logo" class="img-fluid" style="max-height: 50px;">
                 </a>
             </div>
