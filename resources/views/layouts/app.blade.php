@@ -26,7 +26,7 @@
         <!-- Navbar -->
         @include('components.navbar')
 
-        <main class="app mt-5 mb-5">
+        <main class="app mt-5">
             @yield('content')
         </main>
 

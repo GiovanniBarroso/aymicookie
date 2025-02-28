@@ -12,6 +12,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\AddressController;
 
 
 Route::get('/', function () {
@@ -49,8 +50,6 @@ Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
 
 // Ruta para que los usuarios normales solo puedan ver productos
 Route::get('/shop', [ProductController::class, 'shop'])->name('products.shop');
-
-
 
 
 
@@ -96,6 +95,7 @@ Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
 Route::get('/brands', [AdminController::class, 'indexBrands'])->name('brands');
+Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts');
 
 
 
@@ -112,3 +112,17 @@ Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
 
 // Ruta para activar o desactivar un descuento
 Route::patch('/discounts/toggle/{id}', [DiscountController::class, 'toggleStatus'])->name('discounts.toggle');
+
+
+
+
+
+// Ruta para mostrar el formulario de creación de direcciones
+Route::middleware(['auth'])->group(function () {
+    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
+    Route::get('/addresses/create', [AddressController::class, 'create'])->name('addresses.create');
+    Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
+    Route::get('/addresses/{address}/edit', [AddressController::class, 'edit'])->name('addresses.edit');
+    Route::put('/addresses/{address}', [AddressController::class, 'update'])->name('addresses.update');
+    Route::delete('/addresses/{address}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+});

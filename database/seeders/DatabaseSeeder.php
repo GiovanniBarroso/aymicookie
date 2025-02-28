@@ -12,11 +12,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class,      // Inserta los roles
-            UserSeeder::class,      // Inserta los usuarios
-            BrandSeeder::class,     // Inserta las marcas
-            CategorySeeder::class,  // Inserta las categorías
-            ProductSeeder::class,   // Inserta los productos
+            RoleSeeder::class,
+            UserSeeder::class,
+            BrandSeeder::class,
+            CategorySeeder::class,
+            ProductSeeder::class,
+            DiscountSeeder::class,
         ]);
     }
 }
