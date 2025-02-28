@@ -10,6 +10,7 @@ use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FavoriteController;
 
 
 Route::get('/', function () {
@@ -96,7 +97,6 @@ Route::get('/categories', [CategoryController::class, 'index'])->name('categorie
 Route::get('/brands', [AdminController::class, 'indexBrands'])->name('brands');
 
 
-use App\Http\Controllers\FavoriteController;
 
 Route::middleware('auth')->group(function () {
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
