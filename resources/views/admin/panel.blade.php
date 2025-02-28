@@ -24,7 +24,7 @@
                     {{ __('Orders') }}
                 </a>
 
-                <a class="btn btn-outline-dark btn-lg m-2 border-0" href="{{ route('products') }}">
+                <a class="btn btn-outline-dark btn-lg m-2 border-0" href="{{ route('products.index') }}">
                     <i class="fa-solid fa-box me-1"></i>
                     {{ __('Products') }}
                 </a>
