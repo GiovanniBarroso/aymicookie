@@ -89,7 +89,7 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 
-Route::get('/products', [ProductController::class, 'index'])->name('products');
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
