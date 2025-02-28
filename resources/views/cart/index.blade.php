@@ -53,7 +53,7 @@
                 </div>
                 
                 <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a href="{{ url('/') }}" class="btn btn-outline-primary btn-lg rounded-pill d-flex align-items-center gap-2 shadow-sm">
+                    <a href="{{ url('/shop') }}" class="btn btn-outline-primary btn-lg rounded-pill d-flex align-items-center gap-2 shadow-sm">
                         <i class="fas fa-shopping-bag"></i> Seguir Comprando
                     </a>
                     <p class="fw-bold fs-4 mb-0">Total: <span id="grand-total" class="text-success">{{ number_format($total, 2) }}€</span></p>
