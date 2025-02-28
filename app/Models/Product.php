@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Brand;
+use App\Models\Discount;
 
 class Product extends Model
 {
@@ -34,5 +35,21 @@ class Product extends Model
     public function favoritedByUsers()
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function discount()
+    {
+        return $this->hasOne(Discount::class, 'products_id');
+    }
+
+    public function getDiscountedPriceAttribute()
+    {
+        $discount = $this->discount;
+
+        if ($discount && now()->between($discount->fecha_inicio, $discount->fecha_fin)) {
+            return $this->precio - ($this->precio * ($discount->valor / 100));
+        }
+
+        return $this->precio;
     }
 }

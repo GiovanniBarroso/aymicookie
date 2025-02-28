@@ -38,8 +38,20 @@ class CartController extends Controller
     // Agregar un producto al carrito
     public function addToCart(Request $request)
     {
-        $product = Product::findOrFail($request->product_id); // Buscamos el producto por su ID
-        $cart = session()->get('cart', []); // Obtenemos el carrito desde la sesión
+        $product = Product::findOrFail($request->product_id);
+        $cart = session()->get('cart', []);
+
+        // Verificar si el producto tiene un descuento activo
+        $descuento = $product->discount()
+            ->where('activo', true) // Solo los descuentos activos
+            ->where('fecha_inicio', '<=', now())
+            ->where('fecha_fin', '>=', now())
+            ->first();
+
+        $precio_final = $product->precio;
+        if ($descuento) {
+            $precio_final -= ($product->precio * ($descuento->valor / 100));
+        }
 
         // Si el producto ya está en el carrito, incrementamos la cantidad
         if (isset($cart[$request->product_id])) {
@@ -48,7 +60,7 @@ class CartController extends Controller
             // Si no está en el carrito, lo agregamos con cantidad 1
             $cart[$request->product_id] = [
                 'nombre' => $product->nombre,
-                'precio' => $product->precio,
+                'precio' => $precio_final,
                 'cantidad' => 1,
                 'image' => $product->image
             ];
@@ -57,12 +69,13 @@ class CartController extends Controller
         // Guardamos el carrito actualizado en la sesión
         session()->put('cart', $cart);
 
-        // Retornamos una respuesta JSON
         return response()->json([
             'success' => true,
-            'cart_count' => count($cart) // Esto puede ser útil para actualizar el contador del carrito
+            'cart_count' => count($cart)
         ]);
     }
+
+
 
 
     // Eliminar un producto del carrito

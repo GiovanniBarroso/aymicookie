@@ -22,11 +22,11 @@
 </head>
 
 <body style="background-color: #FABC3F">
-    <div id="app">
+    <div id="">
         <!-- Navbar -->
         @include('components.navbar')
 
-        <main class="">
+        <main class="app mt-5 mb-5">
             @yield('content')
         </main>
 
