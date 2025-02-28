@@ -83,7 +83,7 @@ Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 // Ruta para mostrar la página de contacto
 // Cuando un usuario accede a "/contact", se ejecuta el método "index" del ContactController
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::view('/contact', 'contact')->name('contact');
 
 // Ruta para procesar el formulario de contacto
 // Cuando el usuario envía el formulario, se ejecuta el método "send" del ContactController
