@@ -1,5 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark border-bottom border-info-subtle shadow-sm position-relative"
-    style="background-color: #fabc3f;">
+<nav class="navbar navbar-expand-md navbar-dark border-info-subtle position-relative" style="background-color: #fabc3f;">
     <div class="container d-flex flex-column align-items-center">
 
         <!-- Contenedor del navbar centrado -->
@@ -12,7 +11,7 @@
             <!-- Logo centrado -->
             <div class="mx-4">
                 <a href="{{ url('/dashboard') }}">
-                    <img src="images/logo_aymicookie.png" alt="logo" class="img-fluid" style="max-height: 50px;">
+                    <img src="../images/logo_aymicookie.png" alt="logo" class="img-fluid" style="max-height: 50px;">
                 </a>
             </div>
 
@@ -47,7 +46,6 @@
                                 <a class="dropdown-item fw-bold" href="{{ route('profile.edit') }}">Edit Profile</a>
                                 <a class="dropdown-item fw-bold" href="{{ route('profile.password') }}">Update Password</a>
                                 <a class="dropdown-item fw-bold" href="{{ route('favorites.index') }}">Favourites</a>
-                                <a class="dropdown-item fw-bold" href="{{ route('discounts.index') }}">Discounts</a>
 
 
                                 @if (Auth::user()->roles_id == 1)

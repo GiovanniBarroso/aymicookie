@@ -7,8 +7,6 @@
                 <div class="card">
                     <div class="card-header">{{ __('Edit Profile') }}</div>
 
-
-
                     <div class="card-body">
                         @if (session('status') === 'profile-information-updated')
                             <div class="mb-4 font-medium text-sm text-success text-center" role="alert">
