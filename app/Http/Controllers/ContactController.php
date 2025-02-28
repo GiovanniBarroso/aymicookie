@@ -4,28 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactMessage;
 
 class ContactController extends Controller
 {
-    public function index()
-    {
-        return view('contact');
-    }
-
     public function send(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:100',
             'email' => 'required|email',
-            'message' => 'required|string|min:10',
+            'subject' => 'required|string|max:150',
+            'message' => 'required|string|max:1000',
         ]);
 
-        // Enviar el correo (configurar en .env)
-        Mail::raw("Mensaje de: {$request->name}\nEmail: {$request->email}\n\n{$request->message}", function ($mail) use ($request) {
-            $mail->to('contacto@aymicookie.com')
-                 ->subject('Nuevo Mensaje de Contacto');
-        });
+        $data = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'subject' => $request->input('subject'),
+            'message' => $request->input('message'),
+        ];
 
-        return back()->with('success', 'Tu mensaje ha sido enviado con éxito.');
+        // Enviar el correo
+        Mail::to('aymicookie21@gmail.com')->send(new ContactMessage($data));
+
+        return redirect()->back()->with('success', '¡Mensaje enviado correctamente! 📩');
     }
 }
