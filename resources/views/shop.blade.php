@@ -103,8 +103,17 @@
 
                                 <p class="card-text small text-muted">{{ Str::limit($product->description, 50) }}</p>
                                 <span class="badge bg-warning text-dark fs-5 py-2 px-3 mb-2">
-                                    {{ number_format($product->precio, 2) }} €
+                                    @if ($product->precio_descuento)
+                                        <span class="text-danger text-decoration-line-through">
+                                            {{ number_format($product->precio, 2) }} €
+                                        </span>
+                                        <strong>{{ number_format($product->precio_descuento, 2) }} €</strong>
+                                    @else
+                                        <strong>{{ number_format($product->precio, 2) }} €</strong>
+                                    @endif
                                 </span>
+
+
 
                                 <div class="mt-auto">
                                     <button class="btn btn-warning text-white w-100 add-to-cart rounded-pill shadow-sm"

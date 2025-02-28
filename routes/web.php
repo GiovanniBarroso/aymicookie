@@ -11,6 +11,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\DiscountController;
 
 
 Route::get('/', function () {
@@ -102,3 +103,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/favorites/toggle/{productId}', [FavoriteController::class, 'toggleFavorite'])->name('favorites.toggle');
 });
+
+
+
+Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
+    Route::resource('discounts', DiscountController::class);
+});
+
+// Ruta para activar o desactivar un descuento
+Route::patch('/discounts/toggle/{id}', [DiscountController::class, 'toggleStatus'])->name('discounts.toggle');

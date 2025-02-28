@@ -142,8 +142,23 @@ class ProductController extends Controller
             $query->where('precio', '<=', $request->max_price);
         }
 
-        // Obtener productos filtrados
-        $products = $query->get();
+        // Obtener productos filtrados con sus descuentos activos
+        $products = $query->get()->map(function ($product) {
+            $descuento = $product->discount()
+                ->where('activo', true) // Solo los descuentos activos
+                ->where('fecha_inicio', '<=', now())
+                ->where('fecha_fin', '>=', now())
+                ->first();
+
+            // Si hay un descuento válido, aplicarlo
+            if ($descuento) {
+                $product->precio_descuento = $product->precio - ($product->precio * ($descuento->valor / 100));
+            } else {
+                $product->precio_descuento = null; // No hay descuento
+            }
+
+            return $product;
+        });
 
         // Obtener los favoritos del usuario autenticado
         $user = Auth::user();
