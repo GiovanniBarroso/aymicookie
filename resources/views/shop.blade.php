@@ -74,23 +74,38 @@
             </div>
         </div>
 
-        <!-- Lista de Productos (con margen dinámico para evitar solapamiento) -->
+        <!-- Lista de Productos -->
         <div id="productsContainer" class="mt-3">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 @foreach ($products as $product)
                     <div class="col">
                         <div class="card h-100 shadow-sm border-0 bg-light rounded-4">
+                            <!-- Imagen del Producto -->
                             <div class="ratio ratio-4x3">
-                                <img src="{{ asset('storage/' . $product->image ?? 'default.jpg') }}"
+                                <img src="{{ asset('storage/' . $product->image) }}"
                                     class="card-img-top img-fluid rounded-top-4" alt="{{ $product->nombre }}"
                                     loading="lazy">
                             </div>
+
+                            <!-- Contenido de la Tarjeta -->
                             <div class="card-body d-flex flex-column text-center">
-                                <h5 class="card-title fs-4 fw-bold text-brown">{{ $product->nombre }}</h5>
+                                <!-- Nombre del Producto y Botón de Favorito alineados -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title fs-4 fw-bold text-brown m-0">{{ $product->nombre }}</h5>
+                                    <button class="btn-favorite border-0 bg-transparent fs-4 transition"
+                                        data-product-id="{{ $product->id }}"
+                                        data-favorited="{{ in_array($product->id, $favorites) ? 'true' : 'false' }}">
+                                        {{ in_array($product->id, $favorites) ? '❤️' : '🤍' }}
+                                    </button>
+                                </div>
+
+
+
                                 <p class="card-text small text-muted">{{ Str::limit($product->description, 50) }}</p>
                                 <span class="badge bg-warning text-dark fs-5 py-2 px-3 mb-2">
                                     {{ number_format($product->precio, 2) }} €
                                 </span>
+
                                 <div class="mt-auto">
                                     <button class="btn btn-warning text-white w-100 add-to-cart rounded-pill shadow-sm"
                                         data-id="{{ $product->id }}"
@@ -104,6 +119,8 @@
                 @endforeach
             </div>
         </div>
+
+
 
         <!-- Toast de Notificación -->
         <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -176,6 +193,42 @@
                     } catch (error) {
                         console.error('Error en la solicitud:', error);
                     }
+                });
+            });
+
+            document.querySelectorAll('.btn-favorite').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = this.dataset.productId;
+                    const isFavorited = this.dataset.favorited === "true"; // Verifica estado actual
+
+                    fetch(`/favorites/toggle/${productId}`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(response => response.json())
+                        .then(data => {
+                            this.style.transition =
+                                "transform 0.2s ease-in-out, opacity 0.2s ease-in-out";
+                            this.style.opacity = "0"; // Desvanecer antes del cambio
+
+                            setTimeout(() => {
+                                if (isFavorited) {
+                                    this.innerHTML = '🤍'; // Cambia a no favorito
+                                    this.dataset.favorited = "false";
+                                } else {
+                                    this.innerHTML = '❤️'; // Cambia a favorito
+                                    this.dataset.favorited = "true";
+                                }
+                                this.style.opacity = "1"; // Aparecer con transición
+                                this.style.transform =
+                                    "scale(1.1)"; // Pequeña animación al cambiar
+                                setTimeout(() => {
+                                    this.style.transform = "scale(1)";
+                                }, 150);
+                            }, 200);
+                        }).catch(error => console.error('Error:', error));
                 });
             });
         });

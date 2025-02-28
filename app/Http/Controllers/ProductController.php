@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -118,21 +119,21 @@ class ProductController extends Controller
     public function shop(Request $request)
     {
         $query = Product::query();
-    
+
         // Obtener todas las categorías y marcas
         $categories = Category::all();
         $brands = Brand::all();
-    
+
         // Filtrar por categoría
         if ($request->has('category') && $request->category != '') {
             $query->where('categories_id', $request->category);
         }
-    
+
         // Filtrar por marca
         if ($request->has('brand') && $request->brand != '') {
             $query->where('brands_id', $request->brand);
         }
-    
+
         // Filtrar por rango de precios
         if ($request->has('min_price') && $request->min_price != '') {
             $query->where('precio', '>=', $request->min_price);
@@ -140,12 +141,14 @@ class ProductController extends Controller
         if ($request->has('max_price') && $request->max_price != '') {
             $query->where('precio', '<=', $request->max_price);
         }
-    
+
         // Obtener productos filtrados
         $products = $query->get();
-    
-        return view('shop', compact('products', 'categories', 'brands'));
-    }
-    
 
+        // Obtener los favoritos del usuario autenticado
+        $user = Auth::user();
+        $favorites = $user ? $user->favorites->pluck('product_id')->toArray() : [];
+
+        return view('shop', compact('products', 'categories', 'brands', 'favorites'));
+    }
 }

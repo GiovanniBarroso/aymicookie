@@ -94,3 +94,11 @@ Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
 Route::get('/brands', [AdminController::class, 'indexBrands'])->name('brands');
+
+
+use App\Http\Controllers\FavoriteController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
+    Route::post('/favorites/toggle/{productId}', [FavoriteController::class, 'toggleFavorite'])->name('favorites.toggle');
+});

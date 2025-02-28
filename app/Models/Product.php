@@ -30,4 +30,9 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class, 'brands_id');
     }
+
+    public function favoritedByUsers()
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }
