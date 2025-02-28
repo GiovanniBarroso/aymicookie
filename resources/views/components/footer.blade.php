@@ -5,7 +5,7 @@
             <div class="col-md-4">
                 <h5 class="text-uppercase">Menú</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-white text-decoration-none">Home</a></li>
+                    <li><a href="/dashboard" class="text-white text-decoration-none">Home</a></li>
                     <li><a href="/shop" class="text-white text-decoration-none">Products</a></li>
                     <li><a href="#" class="text-white text-decoration-none">About Us</a></li>
                     <li><a href="#" class="text-white text-decoration-none">Contact Us</a></li>
