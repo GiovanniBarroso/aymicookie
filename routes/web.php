@@ -137,3 +137,6 @@ Route::get('/checkout/process-success', [PayPalController::class, 'successPaymen
 Route::get('/checkout/cancel', [PayPalController::class, 'cancelPayment'])->name('checkout.cancel');
 Route::get('/checkout/review', [CartController::class, 'reviewCheckout'])->name('checkout.review');
 Route::post('/checkout/pay', [PayPalController::class, 'createPayment'])->name('checkout.pay');
+Route::get('/checkout/review', [PayPalController::class, 'reviewOrder'])->name('checkout.review');
+
+Route::post('/checkout/confirm', [PayPalController::class, 'showConfirmation'])->name('checkout.confirm');

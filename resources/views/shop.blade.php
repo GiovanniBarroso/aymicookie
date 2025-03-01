@@ -117,7 +117,7 @@
 
 
                             <!-- Contenido de la Tarjeta -->
-                            <div class="card-body d-flex flex-column text-center">
+                            <div class="card-body d-flex flex-column text-c">
                                 <!-- Nombre del Producto y Botón de Favorito -->
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="card-title fs-5 fw-bold text-brown m-0">{{ $product->nombre }}</h5>
@@ -130,11 +130,11 @@
 
 
                                 <!-- Descripción corta -->
-                                <p class="card-text small text-muted">{{ Str::limit($product->description, 50) }}</p>
+                                <p class="card-text small text-muted">{{ Str::limit($product->description, 80) }}</p>
 
 
                                 <!-- Precio con efecto de descuento -->
-                                <span class="price-badge">
+                                <span class="price-badge text-center">
                                     @if ($product->precio_descuento)
                                         <span class="text-danger text-decoration-line-through">
                                             {{ number_format($product->precio, 2) }} €

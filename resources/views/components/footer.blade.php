@@ -51,8 +51,8 @@
             </div>
 
             <!-- Sección de redes sociales con iconos más visibles -->
-            <div class="col-md-3 text-center">
-                <h5 class="text-uppercase fw-bold mb-3">Síguenos</h5>
+            <div class="col-md-3 mb-3 mt-3">
+                <h5 class="text-uppercase fw-bold mb-3 text-center">Síguenos</h5>
                 <div class="d-flex justify-content-center gap-3">
                     <a href="#" class="text-white"><i class="fab fa-facebook fa-2x"></i></a>
                     <a href="https://www.instagram.com/ay.mi.cookie_/" class="text-white"><i

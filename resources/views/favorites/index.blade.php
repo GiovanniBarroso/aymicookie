@@ -1,47 +1,75 @@
 @extends('layouts.app')
+@vite('resources/css/favorites.css')
+
+@section('title', 'Mis Favoritos - Ay Mi Cookie')
 
 @section('content')
-    <div class="container mt-4">
-        <h1 class="text-center text-brown fw-bold">💖 Mis Favoritos 💖</h1>
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-3">
-            @foreach ($favorites as $favorite)
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0 bg-light rounded-4">
-                        <!-- Imagen del Producto -->
-                        <div class="ratio ratio-4x3">
-                            <img src="{{ asset('storage/' . $favorite->product->image ?? 'default.jpg') }}"
-                                class="card-img-top img-fluid rounded-top-4" alt="{{ $favorite->product->nombre }}"
-                                loading="lazy">
-                        </div>
+    <div class="container  mb-5">
+        <!-- 🟠 Encabezado Mejorado -->
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-brown animate__animated animate__fadeInDown">
+                ❤️ Tus Galletas Favoritas ❤️
+            </h1>
+            <p class="text-muted fs-5">Guarda tus galletas favoritas y añádelas al carrito cuando quieras.</p>
+        </div>
 
-                        <!-- Contenido de la Tarjeta -->
-                        <div class="card-body d-flex flex-column text-center">
-                            <!-- Nombre del Producto y Botón de Favorito alineados -->
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="card-title fs-4 fw-bold text-brown m-0">{{ $favorite->product->nombre }}</h5>
-                                <button class="btn-favorite border-0 bg-transparent fs-4 transition"
-                                    data-product-id="{{ $favorite->product->id }}" data-favorited="true">
-                                    ❤️
-                                </button>
+        @if ($favorites->isEmpty())
+            <!-- 📌 Sección cuando no hay favoritos -->
+            <div class="text-center mt-5 no-favorites">
+                <img src="{{ asset('images/no-favorites.webp') }}" class="no-favorites-img mx-auto d-block" alt="No favoritos">
+                <h3 class="mt-4 fw-bold text-brown">
+                    ¡Ups! No tienes galletas favoritas <span class="animate__animated animate__tada">🍪</span>
+                </h3>
+                <p class="text-muted fs-5">Explora nuestra tienda y guarda tus favoritas aquí.</p>
+                <a href="{{ route('products.shop') }}"
+                    class="btn btn-gradient btn-lg px-5 py-3 rounded-pill shadow-lg fw-bold">
+                    <i class="fas fa-store"></i> Explorar Tienda
+                </a>
+            </div>
+        @else
+            <!-- 📌 Lista de productos favoritos -->
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mt-4">
+                @foreach ($favorites as $favorite)
+                    <div class="col">
+                        <div class="card product-card h-100 shadow-sm border-0 bg-light rounded-4">
+                            <!-- 📸 Imagen del producto -->
+                            <div class="ratio ratio-4x3 overflow-hidden">
+                                <img src="{{ asset('storage/' . $favorite->product->image) }}"
+                                    class="card-img-top img-fluid rounded-top-4 product-image"
+                                    alt="{{ $favorite->product->nombre }}" loading="lazy">
                             </div>
 
-                            <p class="card-text small text-muted">{{ Str::limit($favorite->product->description, 50) }}</p>
-                            <span class="badge bg-warning text-dark fs-5 py-2 px-3 mb-2">
-                                {{ number_format($favorite->product->precio, 2) }} €
-                            </span>
+                            <!-- 📌 Contenido -->
+                            <div class="card-body d-flex flex-column text-center">
+                                <!-- Título y botón de favorito alineados -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title fs-5 fw-bold text-brown m-0">{{ $favorite->product->nombre }}</h5>
+                                    <button class="btn-favorite border-0 bg-transparent fs-4 transition"
+                                        data-product-id="{{ $favorite->product->id }}" data-favorited="true">
+                                        ❤️
+                                    </button>
+                                </div>
 
-                            <div class="mt-auto">
-                                <button class="btn btn-warning text-white w-100 add-to-cart rounded-pill shadow-sm"
-                                    data-id="{{ $favorite->product->id }}"
-                                    aria-label="Agregar {{ $favorite->product->nombre }} al carrito">
-                                    <i class="fas fa-cart-plus"></i> Añadir al carrito
-                                </button>
+                                <p class="card-text small text-muted">{{ Str::limit($favorite->product->description, 80) }}
+                                </p>
+
+                                <span class="price-badge">
+                                    <strong>{{ number_format($favorite->product->precio, 2) }} €</strong>
+                                </span>
+
+                                <!-- 🟢 Botones Mejorados -->
+                                <div class="mt-auto d-flex justify-content-center gap-2">
+                                    <button class="btn btn-warning text-white add-to-cart rounded-pill shadow-sm"
+                                        data-id="{{ $favorite->product->id }}" aria-label="Añadir al carrito">
+                                        <i class="fas fa-cart-plus"></i> Añadir
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
+        @endif
     </div>
 @endsection
 @section('scripts')

@@ -1,0 +1,98 @@
+/* 🟠 Encabezado Mejorado */
+.text-brown {
+    color: #4e342e;
+    font-size: 2.4rem;
+}
+
+/* 🔴 Sección "Sin favoritos" con mejor diseño */
+.no-favorites {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.no-favorites-img {
+    opacity: 0.85;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.no-favorites-img:hover {
+    transform: scale(1.08);
+    opacity: 1;
+}
+
+/* 🟡 Botón de Explorar Tienda con Mejor Estilo */
+.btn-gradient {
+    background: linear-gradient(135deg, #ff9800, #ff5722);
+    color: white;
+    border: none;
+    transition: all 0.3s ease-in-out;
+    font-size: 1.2rem;
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(135deg, #ff5722, #ff9800);
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+}
+
+/* 🟠 Tarjetas de Productos con Estilo Mejorado */
+.product-card {
+    transition: all 0.3s ease-in-out;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* 🟡 Imágenes con Hover Mejorado */
+.product-image {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.08);
+    opacity: 0.9;
+}
+
+/* 🔵 Precio con Diseño Optimizado */
+.price-badge {
+    background: #ffcc80;
+    color: #5c3d2e;
+    padding: 8px 12px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 12px;
+    display: inline-block;
+    margin: 12px 0;
+}
+
+/* 🟢 Botón de Eliminar Favorito con Feedback Visual */
+.remove-favorite {
+    background: #e74c3c;
+    border: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.remove-favorite:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+.no-favorites-img {
+    max-width: 300px;
+    /* Ajuste automático en móviles */
+    opacity: 0.9;
+    border-radius: 20px;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.no-favorites-img:hover {
+    transform: scale(1.05);
+    opacity: 1;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
