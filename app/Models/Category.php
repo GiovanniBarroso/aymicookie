@@ -11,7 +11,7 @@ class Category extends Model
 
     protected $fillable = [
         'nombre',
-        'descripcion',
+        'description',
     ];
 
     // Relación con productos
