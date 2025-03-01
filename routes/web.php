@@ -13,6 +13,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\PayPalController;
 
 
 Route::get('/', function () {
@@ -69,6 +70,9 @@ Route::middleware('auth')->group(function () {
 
     // Vaciar el carrito
     Route::get('/cart/clear', [CartController::class, 'clearCart'])->name('cart.clear');
+
+    // Ruta para confirmar la compra y guardar la dirección
+    Route::post('/cart/confirm', [CartController::class, 'confirmPurchase'])->name('cart.confirm');
 });
 
 //Ruta para actualizar la cantidad de productos en el carrito
@@ -116,7 +120,6 @@ Route::patch('/discounts/toggle/{id}', [DiscountController::class, 'toggleStatus
 
 
 
-
 // Ruta para mostrar el formulario de creación de direcciones
 Route::middleware(['auth'])->group(function () {
     Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
@@ -126,3 +129,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/addresses/{address}', [AddressController::class, 'update'])->name('addresses.update');
     Route::delete('/addresses/{address}', [AddressController::class, 'destroy'])->name('addresses.destroy');
 });
+
+
+Route::get('/checkout', [PayPalController::class, 'createPayment'])->name('checkout');
+Route::get('/checkout/success', [PayPalController::class, 'successPayment'])->name('checkout.success');
+Route::get('/checkout/process-success', [PayPalController::class, 'successPayment'])->name('checkout.process-success'); // ✅ Procesa el pago
+Route::get('/checkout/cancel', [PayPalController::class, 'cancelPayment'])->name('checkout.cancel');
+Route::get('/checkout/review', [CartController::class, 'reviewCheckout'])->name('checkout.review');
+Route::post('/checkout/pay', [PayPalController::class, 'createPayment'])->name('checkout.pay');

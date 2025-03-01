@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
+
 
 class CartController extends Controller
 {
@@ -16,8 +20,16 @@ class CartController extends Controller
         // Calcular el total
         $total = collect($cart)->sum(fn($item) => $item['precio'] * $item['cantidad']);
 
-        return view('cart.index', compact('cart', 'total'));
+        // Obtener las direcciones del usuario autenticado
+        $addresses = Auth::check() ? Auth::user()->addresses : [];
+
+        // 🔹 Depuración: Imprimir direcciones en el log de Laravel
+        Log::info('Direcciones del usuario:', $addresses->toArray());
+
+        return view('cart.index', compact('cart', 'total', 'addresses'));
     }
+
+
 
     // Obtener la vista previa del carrito (para el modal)
     public function getCartPreview()
@@ -124,5 +136,38 @@ class CartController extends Controller
         }
 
         return response()->json(['success' => false, 'message' => 'Producto no encontrado en el carrito']);
+    }
+
+
+    public function confirmPurchase(Request $request)
+    {
+        // Validar que se haya seleccionado una dirección válida
+        $request->validate([
+            'address' => 'required|exists:addresses,id'
+        ]);
+
+        // Guardar la dirección en la sesión
+        session(['selected_address_id' => $request->address]);
+
+        // 🔹 Depuración: Imprimir la dirección guardada en la sesión
+        Log::info('Dirección guardada en sesión:', ['selected_address_id' => session('selected_address_id')]);
+
+        return redirect()->route('checkout.review');
+    }
+
+
+
+
+    public function reviewCheckout()
+    {
+        $cart = session()->get('cart', []);
+        $total = collect($cart)->sum(fn($item) => $item['precio'] * $item['cantidad']);
+        $address = session()->get('selected_address_id');
+
+        if (!$address) {
+            return redirect()->route('cart.index')->with('error', 'No has seleccionado una dirección de envío.');
+        }
+
+        return view('checkout.review', compact('cart', 'total', 'address'));
     }
 }
