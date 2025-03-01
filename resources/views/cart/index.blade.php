@@ -7,12 +7,19 @@
         <div class="card shadow-lg border-0 rounded-4 p-4">
             <h1 class="mb-4 text-primary text-center fw-bold">🛒 Carrito de Compras</h1>
 
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+
             @if (empty($cart))
-                <div class="alert alert-warning text-center fw-bold py-3">Tu carrito está vacío. ¡Explora nuestros productos
-                    y encuentra algo especial! 🛍️</div>
+                <div class="alert alert-warning text-center fw-bold py-3">Tu carrito está vacío. 🛍️</div>
             @else
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover text-center align-middle shadow-sm rounded-3">
+                    <table class="table table-bordered text-center shadow-sm rounded-3">
                         <thead class="table-dark">
                             <tr>
                                 <th>Producto</th>
@@ -25,28 +32,19 @@
                         <tbody>
                             @foreach ($cart as $id => $item)
                                 <tr id="cart-item-{{ $id }}">
-                                    <td class="fw-semibold d-flex align-items-center justify-content-start gap-3">
-                                        <img src="{{ asset('storage/' . $item['image']) }}" alt="{{ $item['nombre'] }}"
-                                            class="rounded shadow-sm" width="50" height="50">
+                                    <td class="d-flex align-items-center gap-3">
+                                        <img src="{{ asset('storage/' . $item['image']) }}" width="50" height="50">
                                         {{ $item['nombre'] }}
                                     </td>
                                     <td class="text-success fw-bold">{{ number_format($item['precio'], 2) }}€</td>
                                     <td>
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <button
-                                                class="btn btn-sm btn-outline-danger rounded-circle mx-2 d-flex align-items-center justify-content-center shadow-sm"
-                                                style="width: 40px; height: 40px;"
-                                                onclick="updateQuantity({{ $id }}, 'decrease')">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
+                                        <div class="d-flex align-items-center">
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                onclick="updateQuantity({{ $id }}, 'decrease')">-</button>
                                             <span id="quantity-{{ $id }}"
-                                                class="fs-5 fw-bold px-3 py-2 border rounded bg-light shadow-sm">{{ $item['cantidad'] }}</span>
-                                            <button
-                                                class="btn btn-sm btn-outline-success rounded-circle mx-2 d-flex align-items-center justify-content-center shadow-sm"
-                                                style="width: 40px; height: 40px;"
-                                                onclick="updateQuantity({{ $id }}, 'increase')">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
+                                                class="px-3">{{ $item['cantidad'] }}</span>
+                                            <button class="btn btn-sm btn-outline-success"
+                                                onclick="updateQuantity({{ $id }}, 'increase')">+</button>
                                         </div>
                                     </td>
                                     <td class="fw-bold text-primary"><span
@@ -54,9 +52,7 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('cart.remove', $id) }}"
-                                            class="btn btn-danger btn-sm rounded-pill shadow-sm">
-                                            <i class="fas fa-trash-alt"></i> Eliminar
-                                        </a>
+                                            class="btn btn-danger btn-sm">Eliminar</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -64,18 +60,32 @@
                     </table>
                 </div>
 
-                <div class="d-flex justify-content-between align-items-center mt-4">
-                    <a href="{{ url('/shop') }}"
-                        class="btn btn-outline-primary btn-lg rounded-pill d-flex align-items-center gap-2 shadow-sm">
-                        <i class="fas fa-shopping-bag"></i> Seguir Comprando
-                    </a>
-                    <p class="fw-bold fs-4 mb-0">Total: <span id="grand-total"
-                            class="text-success">{{ number_format($total, 2) }}€</span></p>
-                    <a href="{{ route('cart.clear') }}"
-                        class="btn btn-warning btn-lg rounded-pill d-flex align-items-center gap-2 shadow-sm">
-                        <i class="fas fa-trash"></i> Vaciar Carrito
-                    </a>
-                </div>
+                <!-- Dirección de envío -->
+                @if (isset($addresses) && count($addresses) > 0)
+                    <form action="{{ route('cart.confirm') }}" method="POST">
+                        @csrf
+                        <div class="mt-4">
+                            <label for="address" class="fw-bold">📍 Selecciona tu Dirección de Envío:</label>
+                            <select id="address" name="address" class="form-control">
+                                @foreach ($addresses as $address)
+                                    <option value="{{ $address->id }}">
+                                        {{ $address->calle ?? 'Dirección sin calle' }},
+                                        {{ $address->ciudad ?? 'Ciudad no definida' }},
+                                        {{ $address->provincia ?? 'Provincia no definida' }},
+                                        {{ $address->codigo_postal ?? 'Código postal no definido' }},
+                                        {{ $address->pais ?? 'País no definido' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3 w-100">Confirmar Compra</button>
+                    </form>
+                @else
+                    <p class="text-danger mt-3">No tienes direcciones guardadas. <a href="{{ route('addresses.create') }}"
+                            class="fw-bold">Añadir una nueva dirección</a></p>
+                @endif
+
             @endif
         </div>
     </div>
@@ -85,7 +95,6 @@
             const url = `{{ url('/cart/update') }}/${id}`;
             const quantityElement = document.getElementById(`quantity-${id}`);
             const totalElement = document.getElementById(`total-${id}`);
-            const grandTotalElement = document.getElementById('grand-total');
 
             let newQuantity = parseInt(quantityElement.innerText);
             if (action === 'increase') {
@@ -109,7 +118,6 @@
                     if (data.success) {
                         quantityElement.innerText = newQuantity;
                         totalElement.innerText = (data.new_total).toFixed(2) + '€';
-                        grandTotalElement.innerText = (data.grand_total).toFixed(2) + '€';
                     } else {
                         alert(data.message);
                     }

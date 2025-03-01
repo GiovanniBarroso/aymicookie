@@ -19,6 +19,7 @@ class Order extends Model
         'estado',
         'total',
     ];
+    public $timestamps = true;
 
     // Relación con el usuario
     public function user()
@@ -36,5 +37,12 @@ class Order extends Model
     public function voucher()
     {
         return $this->belongsTo(Voucher::class, 'vouchers_id');
+    }
+    // En App\Models\Order.php
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)
+            ->withPivot('cantidad', 'precio');  // Si deseas almacenar la cantidad y el precio
     }
 }

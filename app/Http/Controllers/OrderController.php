@@ -19,11 +19,16 @@ class OrderController extends Controller
         return view('admin.orders.index', compact('orders'));
     }
 
+    // En OrderController.php
     public function show($id)
     {
-        $order = Order::with('products')->findOrFail($id);
-        return view('orders.show', compact('order'));
+        // Obtener la orden con los productos relacionados
+        $order = Order::with(['products'])->findOrFail($id);
+
+        // Pasar la orden a la vista de detalles
+        return view('admin.orders.show', compact('order'));
     }
+
 
     public function store(Request $request)
     {
@@ -59,6 +64,8 @@ class OrderController extends Controller
                 $order->products()->attach($id, [
                     'cantidad' => $item['cantidad'],
                     'precio' => $item['precio'],
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]);
             }
 

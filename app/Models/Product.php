@@ -21,12 +21,18 @@ class Product extends Model
         'brands_id',
         'image'
     ];
+    public $timestamps = true;
 
     public function category()
     {
         return $this->belongsTo(Category::class, 'categories_id');
     }
 
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)
+            ->withPivot('cantidad', 'precio');
+    }
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brands_id');
