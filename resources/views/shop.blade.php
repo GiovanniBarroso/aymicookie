@@ -109,7 +109,7 @@
                         <div class="card product-card h-100 shadow-sm border-0 bg-light rounded-4">
 
                             <!-- Imagen del Producto con Efecto Hover -->
-                            <div class="ratio ratio-4x3 overflow-hidden">
+                            <div class="ratio ratio-1x1 overflow-hidden">
                                 <img src="{{ asset('storage/' . $product->image) }}"
                                     class="card-img-top img-fluid rounded-top-4 product-image" alt="{{ $product->nombre }}"
                                     loading="lazy">
@@ -120,7 +120,7 @@
                             <div class="card-body d-flex flex-column text-c">
                                 <!-- Nombre del Producto y Botón de Favorito -->
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title fs-5 fw-bold text-brown m-0">{{ $product->nombre }}</h5>
+                                    <h5 class="card-title fs-5 fw-bold text-brown m-0">{{ $product->nombre }}</h1>
                                     <button class="btn-favorite border-0 bg-transparent fs-4 transition"
                                         data-product-id="{{ $product->id }}"
                                         data-favorited="{{ in_array($product->id, $favorites) ? 'true' : 'false' }}">
@@ -130,7 +130,7 @@
 
 
                                 <!-- Descripción corta -->
-                                <p class="card-text small text-muted">{{ Str::limit($product->description, 80) }}</p>
+                                <p class="card-text small text-muted">{{ Str::limit($product->description, 60) }}</p>
 
 
                                 <!-- Precio con efecto de descuento -->
