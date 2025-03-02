@@ -58,6 +58,11 @@
             margin-top: 10px;
         }
 
+        .btn-wrapper {
+            margin-top: 30px;
+            text-align: center;
+        }
+
         .btn:hover {
             background-color: #cf4a0c;
         }
@@ -98,8 +103,11 @@
             <p><strong>Mensaje:</strong></p>
             <p style="background: #f8f8f8; padding: 10px; border-left: 4px solid #E85C0D;">{{ $data['message'] }}</p>
 
-            <!-- Botón de respuesta -->
-            <a href="mailto:{{ $data['email'] }}" class="btn">Responder al Usuario</a>
+
+            <div class="btn-wrapper">
+                <!-- Botón de respuesta -->
+                <a href="mailto:{{ $data['email'] }}" class="btn">Responder al Usuario</a>
+            </div>
         </div>
 
         <!-- Pie de página -->
