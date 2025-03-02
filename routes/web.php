@@ -14,6 +14,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PayPalController;
+use App\Http\Controllers\FacturaController;
 
 
 Route::get('/', function () {
@@ -140,3 +141,6 @@ Route::post('/checkout/pay', [PayPalController::class, 'createPayment'])->name('
 Route::get('/checkout/review', [PayPalController::class, 'reviewOrder'])->name('checkout.review');
 
 Route::post('/checkout/confirm', [PayPalController::class, 'showConfirmation'])->name('checkout.confirm');
+
+
+Route::get('/factura/pdf', [FacturaController::class, 'generarFactura'])->name('factura.pdf');

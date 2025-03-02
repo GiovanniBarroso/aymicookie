@@ -74,13 +74,13 @@ class PayPalController extends Controller
         // 🚨 Evitar pedidos duplicados comprobando si ya existe una orden reciente
         $existingOrder = Order::where('users_id', $user->id)
             ->where('estado', 'Pagado')
-            ->where('created_at', '>=', now()->subMinutes(5)) // Evita registrar varias veces en un corto tiempo
+            ->where('created_at', '>=', now()->subMinutes(1)) // Evita registrar varias veces en un corto tiempo
             ->latest()
             ->first();
 
         if ($existingOrder) {
             Log::warning("⚠️ El usuario ya tiene una orden pagada recientemente. No se procesará otra vez.");
-            return view('checkout.success', ['order' => $existingOrder])->with('success', 'El pago ya fue procesado.');
+            return view('checkout.success', ['order' => $existingOrder, 'success' => 'El pago ya fue procesado.']);
         }
 
         // 🔹 Recuperar dirección
@@ -118,14 +118,15 @@ class PayPalController extends Controller
             DB::commit();
             Log::info("✅ Orden guardada en la base de datos. ID del pedido: {$order->id}");
 
-            // Aquí debes retornar la vista, no una respuesta.
-            return view('checkout.success', ['order' => $order])->with('success', 'Pago realizado con éxito.');
+            return view('checkout.success', ['order' => $order, 'success' => 'Pago realizado con éxito.']);
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("⛔ Error al guardar la orden: " . $e->getMessage());
             return redirect()->route('cart.index')->with('error', 'Hubo un error al procesar la orden.');
         }
     }
+
 
 
 
