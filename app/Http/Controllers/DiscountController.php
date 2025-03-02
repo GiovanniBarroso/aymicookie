@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Discount;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class DiscountController extends Controller
 {
@@ -32,9 +34,19 @@ class DiscountController extends Controller
             'products_id' => 'nullable|exists:products,id'
         ]);
 
-        Discount::create($request->all());
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('discounts.index')->with('success', 'Descuento agregado correctamente.');
+            Discount::create($request->all());
+
+            DB::commit();
+
+            return redirect()->route('discounts.index')->with('success', 'Descuento agregado correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear descuento: ' . $e->getMessage());
+            return redirect()->route('discounts.index')->with('error', 'Error al crear el descuento. Intenta de nuevo.');
+        }
     }
 
     public function edit(Discount $discount)
@@ -55,33 +67,63 @@ class DiscountController extends Controller
             'products_id' => 'nullable|exists:products,id'
         ]);
 
-        $discount->update([
-            'codigo' => $request->codigo,
-            'description' => $request->description,
-            'tipo' => $request->tipo,
-            'valor' => $request->valor,
-            'fecha_inicio' => $request->fecha_inicio,
-            'fecha_fin' => $request->fecha_fin,
-            'products_id' => $request->products_id,
-            'activo' => $request->has('activo'),
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('discounts.index')->with('success', 'Descuento actualizado correctamente.');
+            $discount->update([
+                'codigo' => $request->codigo,
+                'description' => $request->description,
+                'tipo' => $request->tipo,
+                'valor' => $request->valor,
+                'fecha_inicio' => $request->fecha_inicio,
+                'fecha_fin' => $request->fecha_fin,
+                'products_id' => $request->products_id,
+                'activo' => $request->has('activo'),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('discounts.index')->with('success', 'Descuento actualizado correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar descuento: ' . $e->getMessage());
+            return redirect()->route('discounts.index')->with('error', 'Error al actualizar el descuento. Intenta de nuevo.');
+        }
     }
-
 
     public function destroy(Discount $discount)
     {
-        $discount->delete();
-        return redirect()->route('discounts.index')->with('success', 'Descuento eliminado correctamente.');
+        try {
+            DB::beginTransaction();
+
+            $discount->delete();
+
+            DB::commit();
+
+            return redirect()->route('discounts.index')->with('success', 'Descuento eliminado correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar descuento: ' . $e->getMessage());
+            return redirect()->route('discounts.index')->with('error', 'Error al eliminar el descuento. Intenta de nuevo.');
+        }
     }
 
     public function toggleStatus($id)
     {
-        $discount = Discount::findOrFail($id);
-        $discount->activo = !$discount->activo;
-        $discount->save();
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('discounts.index')->with('success', 'Estado del descuento actualizado.');
+            $discount = Discount::findOrFail($id);
+            $discount->activo = !$discount->activo;
+            $discount->save();
+
+            DB::commit();
+
+            return redirect()->route('discounts.index')->with('success', 'Estado del descuento actualizado.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al cambiar estado del descuento: ' . $e->getMessage());
+            return redirect()->route('discounts.index')->with('error', 'Error al cambiar el estado del descuento.');
+        }
     }
 }

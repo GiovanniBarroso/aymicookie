@@ -146,7 +146,6 @@ class PayPalController extends Controller
     public function showConfirmation(Request $request)
     {
         Log::info("✅ Entrando en showConfirmation()");
-        dd("✅ Entrando en showConfirmation()");
 
         $request->validate([
             'selected_address_id' => 'required|exists:addresses,id',
@@ -161,6 +160,7 @@ class PayPalController extends Controller
 
         return view('checkout.confirm_checkout', compact('selected_address', 'cart', 'total'));
     }
+
 
 
 

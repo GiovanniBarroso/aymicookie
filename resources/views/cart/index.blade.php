@@ -65,9 +65,8 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="{{ route('cart.remove', $id) }}"
-                                            class="btn btn-outline-danger btn-sm">
-                                            <i class="fas fa-trash-alt"></i> 
+                                        <a href="{{ route('cart.remove', $id) }}" class="btn btn-outline-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -101,8 +100,9 @@
                                 <h5 class="fw-bold">Resumen del Pedido</h5>
                                 <p class="mb-1">Total de Productos: <span class="fw-bold">{{ count($cart) }}</span></p>
                                 <p class="fs-4 fw-bold text-success">
-                                    Total: {{ number_format($totalGeneral, 2) }}€
+                                    Total: <span id="total-general">{{ number_format($totalGeneral, 2) }}</span>€
                                 </p>
+
                             </div>
 
                             <!-- 🟢 Confirmar Compra -->
@@ -115,7 +115,7 @@
                     </div>
                 @else
                     <p class="text-danger mt-3 text-center">
-                        No tienes direcciones guardadas. 
+                        No tienes direcciones guardadas.
                         <a href="{{ route('addresses.create') }}" class="fw-bold">Añadir una nueva dirección</a>
                     </p>
                 @endif
@@ -153,6 +153,9 @@
                     if (data.success) {
                         quantityElement.innerText = newQuantity;
                         totalElement.innerText = (data.new_total).toFixed(2) + '€';
+
+                        // ✅ Actualizamos el total general 
+                        document.getElementById('total-general').innerText = data.grand_total.toFixed(2);
                     } else {
                         alert(data.message);
                     }

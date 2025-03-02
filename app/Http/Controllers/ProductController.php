@@ -8,20 +8,22 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
     public function index()
     {
         $products = Product::with(['category', 'brand'])->get();
-        return view('admin.products.index', compact('products')); // Ajustado para admin
+        return view('admin.products.index', compact('products'));
     }
 
     public function create()
     {
         $categories = Category::all();
         $brands = Brand::all();
-        return view('admin.products.create', compact('categories', 'brands')); // Ajustado para admin
+        return view('admin.products.create', compact('categories', 'brands'));
     }
 
     public function store(Request $request)
@@ -36,28 +38,38 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
+        try {
+            DB::beginTransaction();
+
+            $imagePath = null;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('products', 'public');
+            }
+
+            Product::create([
+                'nombre' => $request->nombre,
+                'description' => $request->description,
+                'precio' => $request->precio,
+                'stock' => $request->stock,
+                'categories_id' => $request->categories_id,
+                'brands_id' => $request->brands_id,
+                'image' => $imagePath
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('products.index')->with('success', 'Producto agregado correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear producto: ' . $e->getMessage());
+            return redirect()->route('products.index')->with('error', 'Error al crear el producto.');
         }
-
-        Product::create([
-            'nombre' => $request->nombre,
-            'description' => $request->description,
-            'precio' => $request->precio,
-            'stock' => $request->stock,
-            'categories_id' => $request->categories_id,
-            'brands_id' => $request->brands_id,
-            'image' => $imagePath
-        ]);
-
-        return redirect()->route('products.index')->with('success', 'Producto agregado correctamente');
     }
 
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('admin.products.show', compact('product')); // Ajustado para admin
+        return view('admin.products.show', compact('product'));
     }
 
     public function edit($id)
@@ -65,7 +77,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $categories = Category::all();
         $brands = Brand::all();
-        return view('admin.products.edit', compact('product', 'categories', 'brands')); // Ajustado para admin
+        return view('admin.products.edit', compact('product', 'categories', 'brands'));
     }
 
     public function update(Request $request, $id)
@@ -80,61 +92,75 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $product = Product::findOrFail($id);
+        try {
+            DB::beginTransaction();
 
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+            $product = Product::findOrFail($id);
+
+            if ($request->hasFile('image')) {
+                if ($product->image) {
+                    Storage::disk('public')->delete($product->image);
+                }
+                $product->image = $request->file('image')->store('products', 'public');
             }
-            $product->image = $request->file('image')->store('products', 'public');
+
+            $product->update([
+                'nombre' => $request->nombre,
+                'description' => $request->description,
+                'precio' => $request->precio,
+                'stock' => $request->stock,
+                'categories_id' => $request->categories_id,
+                'brands_id' => $request->brands_id,
+                'image' => $product->image
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar producto: ' . $e->getMessage());
+            return redirect()->route('products.index')->with('error', 'Error al actualizar el producto.');
         }
-
-        $product->update([
-            'nombre' => $request->nombre,
-            'description' => $request->description,
-            'precio' => $request->precio,
-            'stock' => $request->stock,
-            'categories_id' => $request->categories_id,
-            'brands_id' => $request->brands_id,
-            'image' => $product->image
-        ]);
-
-        return redirect()->route('products.index')->with('success', 'Producto actualizado correctamente');
     }
 
     public function destroy($id)
     {
-        $product = Product::findOrFail($id);
+        try {
+            DB::beginTransaction();
 
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+            $product = Product::findOrFail($id);
+
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+
+            $product->delete();
+
+            DB::commit();
+
+            return redirect()->route('products.index')->with('success', 'Producto eliminado correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar producto: ' . $e->getMessage());
+            return redirect()->route('products.index')->with('error', 'Error al eliminar el producto.');
         }
-
-        $product->delete();
-        return redirect()->route('products.index')->with('success', 'Producto eliminado correctamente');
     }
-
-
 
     public function shop(Request $request)
     {
         $query = Product::query();
-
-        // Obtener todas las categorías y marcas
         $categories = Category::all();
         $brands = Brand::all();
 
-        // Filtrar por categoría
         if ($request->has('category') && $request->category != '') {
             $query->where('categories_id', $request->category);
         }
 
-        // Filtrar por marca
         if ($request->has('brand') && $request->brand != '') {
             $query->where('brands_id', $request->brand);
         }
 
-        // Filtrar por rango de precios
         if ($request->has('min_price') && $request->min_price != '') {
             $query->where('precio', '>=', $request->min_price);
         }
@@ -142,25 +168,22 @@ class ProductController extends Controller
             $query->where('precio', '<=', $request->max_price);
         }
 
-        // Obtener productos filtrados con sus descuentos activos
         $products = $query->get()->map(function ($product) {
             $descuento = $product->discount()
-                ->where('activo', true) // Solo los descuentos activos
+                ->where('activo', true)
                 ->where('fecha_inicio', '<=', now())
                 ->where('fecha_fin', '>=', now())
                 ->first();
 
-            // Si hay un descuento válido, aplicarlo
             if ($descuento) {
                 $product->precio_descuento = $product->precio - ($product->precio * ($descuento->valor / 100));
             } else {
-                $product->precio_descuento = null; // No hay descuento
+                $product->precio_descuento = null;
             }
 
             return $product;
         });
 
-        // Obtener los favoritos del usuario autenticado
         $user = Auth::user();
         $favorites = $user ? $user->favorites->pluck('product_id')->toArray() : [];
 

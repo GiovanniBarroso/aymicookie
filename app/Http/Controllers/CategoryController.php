@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -25,8 +27,19 @@ class CategoryController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        Category::create($request->all());
-        return redirect()->route('categories.index')->with('success', 'Categoría creada correctamente');
+        try {
+            DB::beginTransaction();
+
+            Category::create($request->all());
+
+            DB::commit();
+
+            return redirect()->route('categories.index')->with('success', 'Categoría creada correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear categoría: ' . $e->getMessage());
+            return redirect()->route('categories.index')->with('error', 'Error al crear la categoría. Intenta de nuevo.');
+        }
     }
 
     public function show($id)
@@ -43,15 +56,42 @@ class CategoryController extends Controller
 
     public function update(Request $request, $id)
     {
-        $category = Category::findOrFail($id);
-        $category->update($request->all());
-        return redirect()->route('categories.index')->with('success', 'Categoría actualizada correctamente');
+        $request->validate([
+            'nombre' => 'required|string|max:100',
+            'description' => 'nullable|string',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $category = Category::findOrFail($id);
+            $category->update($request->all());
+
+            DB::commit();
+
+            return redirect()->route('categories.index')->with('success', 'Categoría actualizada correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar categoría: ' . $e->getMessage());
+            return redirect()->route('categories.index')->with('error', 'Error al actualizar la categoría. Intenta de nuevo.');
+        }
     }
 
     public function destroy($id)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return redirect()->route('categories.index')->with('success', 'Categoría eliminada correctamente');
+        try {
+            DB::beginTransaction();
+
+            $category = Category::findOrFail($id);
+            $category->delete();
+
+            DB::commit();
+
+            return redirect()->route('categories.index')->with('success', 'Categoría eliminada correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar categoría: ' . $e->getMessage());
+            return redirect()->route('categories.index')->with('error', 'Error al eliminar la categoría. Intenta de nuevo.');
+        }
     }
 }

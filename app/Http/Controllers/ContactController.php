@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactMessage;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -24,9 +25,14 @@ class ContactController extends Controller
             'message' => $request->input('message'),
         ];
 
-        // Enviar el correo
-        Mail::to('aymicookie21@gmail.com')->send(new ContactMessage($data));
+        try {
+            Mail::to('aymicookie21@gmail.com')->send(new ContactMessage($data));
 
-        return redirect()->back()->with('success', '¡Mensaje enviado correctamente! 📩');
+            return redirect()->back()->with('success', '¡Mensaje enviado correctamente! 📩');
+        } catch (\Exception $e) {
+            Log::error('Error al enviar mensaje de contacto: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Error al enviar el mensaje. Intenta de nuevo más tarde.');
+        }
     }
 }
