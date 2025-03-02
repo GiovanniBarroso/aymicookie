@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -21,16 +23,27 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
-        return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente');
+        try {
+            DB::beginTransaction();
+
+            $user = User::findOrFail($id);
+            $user->delete();
+
+            DB::commit();
+
+            return redirect()->route('users.index')->with('success', 'Usuario eliminado correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar usuario: ' . $e->getMessage());
+            return redirect()->route('users.index')->with('error', 'Error al eliminar el usuario.');
+        }
     }
+
     public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('admin.users.edit', compact('user'));
     }
-
 
     public function update(Request $request, $id)
     {
@@ -41,11 +54,19 @@ class UserController extends Controller
             'roles_id' => 'required|integer',
         ]);
 
-        $user = User::findOrFail($id);
-        $user->update($request->all());
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
+            $user = User::findOrFail($id);
+            $user->update($request->all());
 
+            DB::commit();
+
+            return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar usuario: ' . $e->getMessage());
+            return redirect()->route('users.index')->with('error', 'Error al actualizar el usuario.');
+        }
     }
-
 }

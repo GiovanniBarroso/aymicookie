@@ -9,25 +9,19 @@ use App\Models\Address;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
     public function index()
     {
         $orders = Order::orderBy('fecha_pedido', 'desc')->paginate(10);
-
-
         return view('admin.orders.index', compact('orders'));
     }
 
-    // En OrderController.php
     public function show($id)
     {
-        // Obtener la orden con los productos relacionados
         $order = Order::with(['products'])->findOrFail($id);
-
-        // Pasar la orden a la vista de detalles
         return view('admin.orders.show', compact('order'));
     }
 
@@ -41,8 +35,6 @@ class OrderController extends Controller
         return view('profile.show', compact('order'));
     }
 
-
-
     public function store(Request $request)
     {
         $cart = session()->get('cart', []);
@@ -50,20 +42,19 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('error', 'Tu carrito está vacío.');
         }
 
-        // Validar que el usuario tenga una dirección registrada
         $address = Address::where('users_id', Auth::id())->first();
         if (!$address) {
             return redirect()->route('cart.index')->with('error', 'Debes configurar una dirección antes de comprar.');
         }
 
-        // Validar si se aplicó un cupón de descuento
         $voucher = null;
         if ($request->has('voucher_code')) {
             $voucher = Voucher::where('codigo', $request->voucher_code)->first();
         }
 
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
+
             $order = Order::create([
                 'users_id' => Auth::id(),
                 'addresses_id' => $address->id,
@@ -83,27 +74,39 @@ class OrderController extends Controller
             }
 
             session()->forget('cart');
+
             DB::commit();
 
             return redirect()->route('orders.show', $order->id)->with('success', 'Pedido realizado con éxito.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('cart.index')->with('error', 'Hubo un error al procesar el pedido.');
+            Log::error('Error al procesar pedido: ' . $e->getMessage());
+            return redirect()->route('cart.index')->with('error', 'Hubo un error al procesar el pedido. Intenta de nuevo.');
         }
     }
 
     public function destroy($id)
     {
-        $order = Order::findOrFail($id);
-        $order->delete();
-        return redirect()->route('orders.index')->with('success', 'Pedido eliminado correctamente.');
+        try {
+            DB::beginTransaction();
+
+            $order = Order::findOrFail($id);
+            $order->products()->detach(); // ✅ Importante: eliminar relación con productos
+            $order->delete();
+
+            DB::commit();
+
+            return redirect()->route('orders.index')->with('success', 'Pedido eliminado correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar pedido: ' . $e->getMessage());
+            return redirect()->route('orders.index')->with('error', 'Error al eliminar el pedido. Intenta de nuevo.');
+        }
     }
 
     public function myOrders()
     {
         $orders = Order::where('users_id', auth()->id())->latest()->get();
-
         return view('profile.orders', compact('orders'));
     }
-
 }

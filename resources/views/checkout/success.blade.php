@@ -3,7 +3,8 @@
 @section('title', 'Compra Exitosa')
 
 @section('content')
-    <div class="container py-5 mb-5 rounded-4" style="background: linear-gradient(135deg, #f0f4ff, #ffffff); min-height: 80vh;">
+    <div class="container py-5 mb-5 rounded-4"
+        style="background: linear-gradient(135deg, #f0f4ff, #ffffff); min-height: 80vh;">
         <div class="card shadow-lg border-0 rounded-4 p-5 text-center animate__animated animate__fadeIn">
             <h1 class="mb-4 text-success fw-bold display-5">
                 🎉 ¡Gracias por tu compra!
@@ -29,7 +30,7 @@
                 <a href="{{ route('products.shop') }}" class="btn btn-primary btn-lg px-4 py-2 shadow-sm">
                     🛒 Seguir Comprando
                 </a>
-                <a href="{{ route('orders') }}" class="btn btn-outline-secondary btn-lg px-4 py-2 shadow-sm">
+                <a href="{{ route('orders.my') }}" class="btn btn-outline-secondary btn-lg px-4 py-2 shadow-sm">
                     📦 Ver Mis Pedidos
                 </a>
             </div>

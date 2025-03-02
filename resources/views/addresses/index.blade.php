@@ -33,6 +33,9 @@
                     <a href="{{ route('addresses.create') }}" class="btn btn-success rounded-pill fw-bold shadow-sm">
                         ➕ Añadir Nueva
                     </a>
+                    <a href="{{ route('cart.index') }}" class="btn btn-warning rounded-pill fw-bold shadow-sm">
+                        👛Volver al carrito
+                    </a>
                 </div>
             </div>
 

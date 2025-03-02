@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Brand;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -21,8 +23,19 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $product = Product::create($request->all());
-        return redirect()->route('admin.products.index')->with('success', 'Producto creado correctamente.');
+        try {
+            DB::beginTransaction();
+
+            Product::create($request->all());
+
+            DB::commit();
+
+            return redirect()->route('admin.products.index')->with('success', 'Producto creado correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al crear producto: ' . $e->getMessage());
+            return redirect()->route('admin.products.index')->with('error', 'Error al crear el producto. Intenta de nuevo.');
+        }
     }
 
     public function show($id)
@@ -39,26 +52,47 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
-        $product->update($request->all());
-        return redirect()->route('admin.products.index')->with('success', 'Producto actualizado.');
+        try {
+            DB::beginTransaction();
+
+            $product = Product::findOrFail($id);
+            $product->update($request->all());
+
+            DB::commit();
+
+            return redirect()->route('admin.products.index')->with('success', 'Producto actualizado.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar producto: ' . $e->getMessage());
+            return redirect()->route('admin.products.index')->with('error', 'Error al actualizar el producto. Intenta de nuevo.');
+        }
     }
 
     public function destroy($id)
     {
-        Product::destroy($id);
-        return redirect()->route('admin.products.index')->with('success', 'Producto eliminado.');
+        try {
+            DB::beginTransaction();
+
+            Product::destroy($id);
+
+            DB::commit();
+
+            return redirect()->route('admin.products.index')->with('success', 'Producto eliminado.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar producto: ' . $e->getMessage());
+            return redirect()->route('admin.products.index')->with('error', 'Error al eliminar el producto. Intenta de nuevo.');
+        }
     }
 
-    // Panel de administrador
-
-    public function indexPanel() {
+    public function indexPanel()
+    {
         return view('admin.panel');
     }
 
-    public function indexBrands() {
+    public function indexBrands()
+    {
         $brands = Brand::all();
         return view('admin.brands.index', compact('brands'));
     }
-
 }

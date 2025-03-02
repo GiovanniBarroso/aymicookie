@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AddressController extends Controller
 {
@@ -21,7 +23,6 @@ class AddressController extends Controller
 
     public function store(Request $request)
     {
-        // Validación de datos
         $request->validate([
             'calle' => 'required|string|max:255',
             'ciudad' => 'required|string|max:100',
@@ -30,31 +31,34 @@ class AddressController extends Controller
             'pais' => 'required|string|max:50',
         ]);
 
-        // Obtener usuario autenticado
         $user = Auth::user();
         if (!$user) {
             return redirect()->route('addresses.index')->with('error', 'Usuario no autenticado.');
         }
 
-        // Crear dirección manualmente con `user_id`
-        $address = new Address([
-            'user_id' => $user->id,  // 🔹 Asegurar que se asigna el usuario autenticado
-            'calle' => $request->calle,
-            'ciudad' => $request->ciudad,
-            'provincia' => $request->provincia,
-            'codigo_postal' => $request->codigo_postal,
-            'pais' => $request->pais,
-        ]);
+        try {
+            DB::beginTransaction();
 
-        $address->save();
+            $address = new Address([
+                'user_id' => $user->id,
+                'calle' => $request->calle,
+                'ciudad' => $request->ciudad,
+                'provincia' => $request->provincia,
+                'codigo_postal' => $request->codigo_postal,
+                'pais' => $request->pais,
+            ]);
 
-        return redirect()->route('addresses.index')->with('success', 'Dirección añadida correctamente.');
+            $address->save();
+
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Dirección añadida correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al guardar dirección: ' . $e->getMessage());
+            return redirect()->route('addresses.index')->with('error', 'Error al guardar la dirección. Intenta de nuevo.');
+        }
     }
-
-
-
-
-
 
     public function edit(Address $address)
     {
@@ -78,9 +82,19 @@ class AddressController extends Controller
             'pais' => 'required|string|max:50',
         ]);
 
-        $address->update($request->all());
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('addresses.index')->with('success', 'Dirección actualizada correctamente.');
+            $address->update($request->all());
+
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Dirección actualizada correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al actualizar dirección: ' . $e->getMessage());
+            return redirect()->route('addresses.index')->with('error', 'Error al actualizar la dirección. Intenta de nuevo.');
+        }
     }
 
     public function destroy(Address $address)
@@ -89,7 +103,18 @@ class AddressController extends Controller
             abort(403);
         }
 
-        $address->delete();
-        return redirect()->route('addresses.index')->with('success', 'Dirección eliminada correctamente.');
+        try {
+            DB::beginTransaction();
+
+            $address->delete();
+
+            DB::commit();
+
+            return redirect()->route('addresses.index')->with('success', 'Dirección eliminada correctamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error al eliminar dirección: ' . $e->getMessage());
+            return redirect()->route('addresses.index')->with('error', 'Error al eliminar la dirección. Intenta de nuevo.');
+        }
     }
 }
