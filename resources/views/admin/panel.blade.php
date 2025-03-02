@@ -29,12 +29,12 @@
                         {{ __('Products') }}
                     </a>
 
-                    <a class="btn btn-outline-dark btn-lg m-2 border-0" href="{{ route('categories') }}">
+                    <a class="btn btn-outline-dark btn-lg m-2 border-0" href="{{ route('categories.index') }}">
                         <i class="fa-solid fa-list me-1"></i>
                         {{ __('Categories') }}
                     </a>
 
-                    <a class="btn btn-outline-dark btn-lg m-2 border-0" href="{{ route('brands') }}">
+                    <a class="btn btn-outline-dark btn-lg m-2 border-0" href="{{ route('brands.index') }}">
                         <i class="fa-solid fa-shop me-1"></i>
                         {{ __('Brands') }}
                     </a>

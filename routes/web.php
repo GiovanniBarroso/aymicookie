@@ -14,8 +14,7 @@ use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PayPalController;
-use App\Http\Controllers\FacturaController;
-
+use App\Http\Controllers\BrandController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -41,8 +40,9 @@ Route::view('profile/password', 'profile.password')->name('profile.password')->m
 // Rutas accesibles solo por administradores (role_id = 1)
 Route::middleware(['auth', RoleMiddleware::class . ':1'])->group(function () {
     Route::resource('users', UserController::class);
-    Route::resource('products', ProductController::class);
+    Route::resource('products', controller: ProductController::class);
     Route::resource('categories', CategoryController::class);
+    Route::resource('brands', controller: BrandController::class);
     Route::resource('orders', OrderController::class)->except(['store']);
     Route::get('/panel', [AdminController::class, 'indexPanel'])->name('admin.panel');
 });
@@ -98,8 +98,8 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/users', [UserController::class, 'index'])->name('users');
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
-Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
-Route::get('/brands', [AdminController::class, 'indexBrands'])->name('brands');
+Route::get('/categories', action: [CategoryController::class, 'index'])->name('categories.index');
+Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
 Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts');
 
 
