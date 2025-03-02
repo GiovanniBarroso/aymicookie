@@ -1,0 +1,3 @@
+CREATE SCHEMA IF NOT EXISTS `aymicookie` DEFAULT CHARACTER SET utf8 ;
+CREATE DATABASE IF NOT EXISTS `aymicookie`;
+USE `aymicookie` ;

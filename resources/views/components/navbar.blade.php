@@ -45,7 +45,7 @@
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item fw-bold" href="{{ route('profile.edit') }}">Edit Profile</a>
                                 <a class="dropdown-item fw-bold" href="{{ route('profile.password') }}">Update Password</a>
-                                <a class="dropdown-item fw-bold" href="{{ route('favorites.index') }}">Favourites</a>
+                                <a class="dropdown-item fw-bold" href="{{ route('favorites.index') }}">Favorites</a>
 
 
                                 @if (Auth::user()->roles_id == 1)
