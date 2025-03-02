@@ -1,33 +1,64 @@
 @extends('layouts.app')
 
+@section('title', 'Editar Producto')
+
 @section('content')
-    <div class="container py-4">
-        <div class="card shadow-lg p-4">
-            <h1 class="mb-4 text-primary text-center">Editar Producto</h1>
-            
+
+    <div class="container py-5">
+
+        <!-- BOTÓN VOLVER -->
+        <div class="mb-3">
+            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary rounded-pill shadow-sm">
+                🔙 Volver a Productos
+            </a>
+        </div>
+
+        <!-- CARD PRINCIPAL -->
+        <div class="card shadow-lg border-0 rounded-4 p-4">
+
+            <h1 class="text-center fw-bold text-primary mb-4">✏️ Editar Producto #{{ $product->id }}</h1>
+
             <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
-                @method('PUT')
                 @csrf
-                
-                <div class="row">
+                @method('PUT')
+
+                <div class="row g-4">
+
+                    <!-- FORMULARIO -->
                     <div class="col-md-6">
                         @include('admin.products._form')
                     </div>
-                    
+
+                    <!-- IMAGEN ACTUAL -->
                     <div class="col-md-6 text-center">
                         @if ($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid rounded shadow-sm mb-3" width="100%" alt="Imagen del Producto">
+                            <img src="{{ asset('storage/' . $product->image) }}" alt="Imagen del Producto"
+                                class="img-fluid rounded-4 shadow-sm" style="max-height: 400px; object-fit: cover;">
+                            <p class="mt-2 text-muted fst-italic">Imagen actual del producto</p>
                         @else
-                            <div class="text-muted">No hay imagen disponible</div>
+                            <div class="text-muted fst-italic py-5">🚫 Sin imagen disponible</div>
                         @endif
                     </div>
+
                 </div>
-                
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ route('products.index') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Cancelar</a>
-                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Actualizar Producto</button>
+
+                <!-- BOTONES DE ACCIÓN -->
+                <div class="d-flex justify-content-center gap-3 mt-5">
+                    <a href="{{ route('products.index') }}"
+                        class="btn btn-secondary fw-bold rounded-pill shadow-sm px-4 py-2 d-inline-flex align-items-center gap-2">
+                        ❌ Cancelar
+                    </a>
+
+                    <button type="submit"
+                        class="btn btn-success fw-bold rounded-pill shadow-sm px-4 py-2 d-inline-flex align-items-center gap-2">
+                        💾 Guardar Cambios
+                    </button>
                 </div>
+
             </form>
+
         </div>
+
     </div>
+
 @endsection

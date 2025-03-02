@@ -1,20 +1,30 @@
 @extends('layouts.app')
 
-@section('content')
-    <div class="container mt-4">
-        <h1 class="text-center text-brown fw-bold">✏️ Editar Descuento</h1>
+@section('title', 'Editar Descuento')
 
-        <div class="card shadow-sm border-0 rounded-4 p-4">
+@section('content')
+    <div class="container py-5">
+
+        <!-- CABECERA -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="{{ route('discounts.index') }}" class="btn btn-outline-secondary rounded-pill shadow-sm">
+                🔙 Volver a Descuentos
+            </a>
+            <h1 class="text-center text-brown fw-bold flex-grow-1 m-0">✏️ Editar Descuento</h1>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="card shadow-lg border-0 rounded-4 p-4">
             <form action="{{ route('discounts.update', $discount->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
-                <div class="row g-3">
-                    <!-- Código del Descuento -->
+                <div class="row g-4">
+                    <!-- Código -->
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Código</label>
-                        <input type="text" name="codigo" class="form-control rounded-pill" value="{{ $discount->codigo }}"
-                            required>
+                        <input type="text" name="codigo" class="form-control rounded-pill"
+                            value="{{ $discount->codigo }}" required>
                     </div>
 
                     <!-- Descripción -->
@@ -35,30 +45,30 @@
                         </select>
                     </div>
 
-                    <!-- Valor del Descuento -->
+                    <!-- Valor -->
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Valor (%)</label>
                         <input type="number" name="valor" class="form-control rounded-pill"
                             value="{{ $discount->valor }}" required min="1" max="100">
                     </div>
 
-                    <!-- Fecha de Inicio -->
+                    <!-- Fecha Inicio -->
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Fecha de Inicio</label>
                         <input type="date" name="fecha_inicio" class="form-control rounded-pill"
                             value="{{ $discount->fecha_inicio }}" required>
                     </div>
 
-                    <!-- Fecha de Fin -->
+                    <!-- Fecha Fin -->
                     <div class="col-md-6">
                         <label class="form-label fw-bold">Fecha de Fin</label>
                         <input type="date" name="fecha_fin" class="form-control rounded-pill"
                             value="{{ $discount->fecha_fin }}" required>
                     </div>
 
-                    <!-- Seleccionar Producto (Si aplica) -->
+                    <!-- Producto -->
                     <div class="col-md-12">
-                        <label class="form-label fw-bold">Producto (Opcional)</label>
+                        <label class="form-label fw-bold">Producto (opcional)</label>
                         <select name="products_id" class="form-select rounded-pill">
                             <option value="">No aplica a un producto específico</option>
                             @foreach ($products as $product)
@@ -70,20 +80,24 @@
                         </select>
                     </div>
 
-                    <!-- Botón de Estado -->
+                    <!-- Estado -->
                     <div class="col-md-12 text-center">
-                        <label class="form-label fw-bold">Estado</label><br>
-                        <input type="checkbox" name="activo" id="activo" {{ $discount->activo ? 'checked' : '' }}>
-                        <label for="activo" class="fw-bold">{{ $discount->activo ? 'Activo' : 'Inactivo' }}</label>
+                        <div class="form-check form-switch d-inline-flex align-items-center">
+                            <input class="form-check-input" type="checkbox" name="activo" id="activo"
+                                {{ $discount->activo ? 'checked' : '' }}>
+                            <label for="activo" class="form-check-label fw-bold ms-2">
+                                {{ $discount->activo ? 'Activo' : 'Inactivo' }}
+                            </label>
+                        </div>
                     </div>
 
-                    <!-- Botones de Acción -->
-                    <div class="col-md-12 text-center mt-3">
-                        <button type="submit" class="btn btn-warning text-white fw-bold px-4 py-2 rounded-pill shadow-sm">
+                    <!-- Botones -->
+                    <div class="col-md-12 text-center mt-4">
+                        <button type="submit" class="btn btn-warning fw-bold px-4 py-2 rounded-pill shadow-sm">
                             💾 Guardar Cambios
                         </button>
                         <a href="{{ route('discounts.index') }}"
-                            class="btn btn-secondary fw-bold px-4 py-2 rounded-pill shadow-sm">
+                            class="btn btn-secondary fw-bold px-4 py-2 rounded-pill shadow-sm ms-2">
                             ❌ Cancelar
                         </a>
                     </div>

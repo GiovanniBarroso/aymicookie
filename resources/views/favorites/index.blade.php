@@ -59,10 +59,7 @@
 
                                 <!-- 🟢 Botones Mejorados -->
                                 <div class="mt-auto d-flex justify-content-center gap-2">
-                                    <button class="btn btn-warning text-white add-to-cart rounded-pill shadow-sm"
-                                        data-id="{{ $favorite->product->id }}" aria-label="Añadir al carrito">
-                                        <i class="fas fa-cart-plus"></i> Añadir
-                                    </button>
+                                    
                                 </div>
                             </div>
                         </div>
