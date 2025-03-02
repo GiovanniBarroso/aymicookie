@@ -8,6 +8,8 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Mail\CompraExitosaMail;
+use Illuminate\Support\Facades\Mail;
 
 class PayPalController extends Controller
 {
@@ -53,8 +55,6 @@ class PayPalController extends Controller
 
         return redirect()->route('checkout.cancel')->with('error', 'No se pudo iniciar el pago con PayPal.');
     }
-
-
 
 
 
@@ -115,6 +115,11 @@ class PayPalController extends Controller
                 ]);
             }
 
+            $order->load('products');
+            Log::info('Enviando correo de compra exitosa para el pedido:', ['order_id' => $order->id]);
+            Mail::to($user->email)->send(new CompraExitosaMail($order));
+
+
             DB::commit();
             Log::info("✅ Orden guardada en la base de datos. ID del pedido: {$order->id}");
 
@@ -126,15 +131,6 @@ class PayPalController extends Controller
             return redirect()->route('cart.index')->with('error', 'Hubo un error al procesar la orden.');
         }
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -165,11 +161,6 @@ class PayPalController extends Controller
 
         return view('checkout.confirm_checkout', compact('selected_address', 'cart', 'total'));
     }
-
-
-
-
-
 
 
 

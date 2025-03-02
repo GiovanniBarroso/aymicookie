@@ -15,6 +15,7 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\PayPalController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\FacturaController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
