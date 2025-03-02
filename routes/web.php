@@ -103,10 +103,18 @@ Route::get('/discounts', [DiscountController::class, 'index'])->name('discounts'
 
 
 
+// ✅ Rutas de usuario autenticado
 Route::middleware('auth')->group(function () {
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/favorites/toggle/{productId}', [FavoriteController::class, 'toggleFavorite'])->name('favorites.toggle');
+
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('orders.my');
+    Route::get('/my-orders/{order}', [OrderController::class, 'showUser'])->name('my-orders.show');
+});
+
 
 
 

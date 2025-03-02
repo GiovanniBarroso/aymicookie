@@ -31,6 +31,17 @@ class OrderController extends Controller
         return view('admin.orders.show', compact('order'));
     }
 
+    public function showUser($id)
+    {
+        $order = Order::where('id', $id)
+            ->where('users_id', auth()->id())
+            ->with('address')
+            ->firstOrFail();
+
+        return view('profile.show', compact('order'));
+    }
+
+
 
     public function store(Request $request)
     {
@@ -87,4 +98,12 @@ class OrderController extends Controller
         $order->delete();
         return redirect()->route('orders.index')->with('success', 'Pedido eliminado correctamente.');
     }
+
+    public function myOrders()
+    {
+        $orders = Order::where('users_id', auth()->id())->latest()->get();
+
+        return view('profile.orders', compact('orders'));
+    }
+
 }

@@ -54,11 +54,12 @@
             <div class="col-md-3 mb-3 mt-3">
                 <h5 class="text-uppercase fw-bold mb-3 text-center">Síguenos</h5>
                 <div class="d-flex justify-content-center gap-3">
-                    <a href="#" class="text-white"><i class="fab fa-facebook fa-2x"></i></a>
                     <a href="https://www.instagram.com/ay.mi.cookie_/" class="text-white"><i
                             class="fab fa-instagram fa-2x"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-twitter fa-2x"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-tiktok fa-2x"></i></a>
+                    <a href="https://x.com/aymicookie21" class="text-white"><i class="fab fa-twitter fa-2x"></i></a>
+                    <a href="https://www.tiktok.com/@aymicookie" class="text-white"><i
+                            class="fab fa-tiktok fa-2x"></i></a><a href="#" class="text-white"><i
+                            class="fab fa-facebook fa-2x"></i></a>
                 </div>
             </div>
         </div>

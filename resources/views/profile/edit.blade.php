@@ -74,6 +74,33 @@
                                 </button>
                             </div>
                         </form>
+
+                        <!-- ⚙️ Gestión de Cuenta -->
+                        <hr class="my-5">
+                        <h2 class="text-center fw-bold text-brown mb-4">
+                            ⚙️ Gestión de tu Cuenta
+                        </h2>
+
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <!-- Direcciones -->
+                            <a href="{{ route('addresses.index') }}"
+                                class="btn btn-outline-primary px-4 py-2 rounded-pill shadow-sm fw-bold">
+                                <i class="fas fa-map-marker-alt"></i> Mis Direcciones
+                            </a>
+
+                            <!-- Pedidos -->
+                            <a href="{{ route('orders.my') }}"
+                                class="btn btn-outline-success px-4 py-2 rounded-pill shadow-sm fw-bold">
+                                <i class="fas fa-box"></i> Mis Pedidos
+                            </a>
+
+                            <!-- Facturas -->
+                            <a href="{{ route('factura.pdf') }}"
+                                class="btn btn-outline-warning px-4 py-2 rounded-pill shadow-sm fw-bold">
+                                <i class="fas fa-file-invoice"></i> Mis Facturas
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </div>
