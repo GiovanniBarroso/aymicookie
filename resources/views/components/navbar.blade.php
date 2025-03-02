@@ -32,34 +32,60 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto">
                     @guest
-                        <li class="nav-item me-3 fw-bold"><a class="nav-link"
-                                href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                        <li class="nav-item me-3 fw-bold"><a class="nav-link"
-                                href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link fw-bold d-flex align-items-center gap-1" href="{{ route('login') }}">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item me-3">
+                            <a class="nav-link fw-bold d-flex align-items-center gap-1" href="{{ route('register') }}">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                        </li>
                     @else
                         <li class="nav-item dropdown me-3">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle fw-bold" href="#" role="button"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ Auth::user()->name }}
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle fw-bold d-flex align-items-center gap-2"
+                                href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="fas fa-user-circle"></i> {{ Auth::user()->name }}
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item fw-bold" href="{{ route('profile.edit') }}">Edit Profile</a>
-                                <a class="dropdown-item fw-bold" href="{{ route('profile.password') }}">Update Password</a>
-                                <a class="dropdown-item fw-bold" href="{{ route('favorites.index') }}">Favorites</a>
+                            <div class="dropdown-menu dropdown-menu-end shadow-lg rounded-3 py-2"
+                                aria-labelledby="navbarDropdown" style="min-width: 220px;">
 
+                                <!-- Opciones del perfil -->
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2 fw-bold"
+                                    href="{{ route('profile.edit') }}">
+                                    <i class="fas fa-user-edit text-warning"></i> Edit Profile
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2 fw-bold"
+                                    href="{{ route('profile.password') }}">
+                                    <i class="fas fa-key text-warning"></i> Update Password
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2 fw-bold"
+                                    href="{{ route('favorites.index') }}">
+                                    <i class="fas fa-heart text-danger"></i> Favorites
+                                </a>
 
                                 @if (Auth::user()->roles_id == 1)
-                                    <a class="dropdown-item fw-bold" href="{{ route(name: 'admin.panel') }}">Admin
-                                        Panel</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2 fw-bold"
+                                        href="{{ route('admin.panel') }}">
+                                        <i class="fas fa-tools text-primary"></i> Admin Panel
+                                    </a>
                                 @endif
 
-                                <a class="dropdown-item fw-bold" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Logout') }}</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item d-flex align-items-center gap-2 py-2 fw-bold text-danger"
+                                    href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf
                                 </form>
                             </div>
                         </li>
                     @endguest
+
 
                     <!-- Carrito de Compras -->
                     <li class="nav-item">
