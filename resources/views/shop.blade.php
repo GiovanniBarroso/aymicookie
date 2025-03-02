@@ -1,30 +1,43 @@
 @extends('layouts.app')
+@vite('resources/css/shop.css')
 
 @section('content')
     <div class="container mt-4 mb-5">
-        <h1 class="text-center mb-4 text-white">🍪 Encuentra tu galleta favorita 🍪</h1>
+        <div class="container mt-4 mb-5">
 
-        @if (session('error'))
-            <div class="alert alert-danger">{{ session('error') }}</div>
-        @endif
+            <!-- Encabezado con Animación -->
+            <h1 class="text-center mb-4 fw-bold text-brown animate__animated animate__fadeInDown">
+                🍪 Encuentra tu galleta favorita 🍪
+            </h1>
 
-        <!-- Botón para mostrar/ocultar filtros -->
-        <div class="text-center mb-4">
-            <button id="toggleFilters" class="btn btn-warning text-white fw-bold px-4 py-2 rounded-pill shadow-sm"
-                type="button" data-bs-toggle="collapse" data-bs-target="#filtersContainer" aria-expanded="false"
-                aria-controls="filtersContainer">
-                <i class="fas fa-filter"></i> Mostrar Filtros
-            </button>
+            @if (session('error'))
+                <div class="alert alert-danger text-center">{{ session('error') }}</div>
+            @endif
+
+            <!-- Botón para Mostrar/Ocultar Filtros -->
+            <div class="text-center mb-4">
+                <button id="toggleFilters"
+                    class="btn btn-warning text-white fw-bold px-4 py-2 rounded-pill shadow-sm transition" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#filtersContainer" aria-expanded="false"
+                    aria-controls="filtersContainer">
+                    <i class="fas fa-filter"></i> <span class="ms-1">Mostrar Filtros</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Contenedor de Filtros con margen dinámico -->
+
+
+
+        <!-- Contenedor de Filtros con Diseño Mejorado -->
         <div id="filtersContainer" class="collapse">
-            <div class="card card-body bg-light p-4 shadow-sm rounded-4 border-0">
+            <div class="card card-body bg-light p-4 shadow-lg rounded-4 border-0">
                 <form method="GET" action="{{ route('products.shop') }}">
                     <div class="row g-3">
+
+                        <!-- Categoría -->
                         <div class="col-md-3">
                             <div class="form-floating">
-                                <select name="category" class="form-select rounded-pill">
+                                <select name="category" class="form-select custom-input">
                                     <option value="">Todas las categorías</option>
                                     @foreach ($categories as $category)
                                         <option value="{{ $category->id }}"
@@ -36,9 +49,12 @@
                                 <label>Categoría</label>
                             </div>
                         </div>
+
+
+                        <!-- Marca -->
                         <div class="col-md-3">
                             <div class="form-floating">
-                                <select name="brand" class="form-select rounded-pill">
+                                <select name="brand" class="form-select custom-input">
                                     <option value="">Todas las marcas</option>
                                     @foreach ($brands as $brand)
                                         <option value="{{ $brand->id }}"
@@ -50,23 +66,32 @@
                                 <label>Marca</label>
                             </div>
                         </div>
+
+
+                        <!-- Precio mínimo -->
                         <div class="col-md-3">
                             <div class="form-floating">
-                                <input type="number" name="min_price" class="form-control rounded-pill"
+                                <input type="number" name="min_price" class="form-control custom-input"
                                     placeholder="Precio mínimo" value="{{ request('min_price') }}">
                                 <label>Precio mínimo</label>
                             </div>
                         </div>
+
+
+                        <!-- Precio máximo -->
                         <div class="col-md-3">
                             <div class="form-floating">
-                                <input type="number" name="max_price" class="form-control rounded-pill"
+                                <input type="number" name="max_price" class="form-control custom-input"
                                     placeholder="Precio máximo" value="{{ request('max_price') }}">
                                 <label>Precio máximo</label>
                             </div>
                         </div>
                     </div>
-                    <div class="text-center mt-3">
-                        <button type="submit" class="btn btn-warning text-white fw-bold px-4 py-2 rounded-pill shadow-sm">
+
+
+                    <!-- Botón de Aplicar Filtros -->
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-gradient fw-bold px-4 py-2 rounded-pill shadow-sm">
                             <i class="fas fa-cookie"></i> Aplicar Filtros
                         </button>
                     </div>
@@ -74,24 +99,28 @@
             </div>
         </div>
 
-        <!-- Lista de Productos -->
+
+
+        <!-- Lista de Productos Mejorada -->
         <div id="productsContainer" class="mt-3">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                 @foreach ($products as $product)
                     <div class="col">
-                        <div class="card h-100 shadow-sm border-0 bg-light rounded-4">
-                            <!-- Imagen del Producto -->
-                            <div class="ratio ratio-4x3">
+                        <div class="card product-card h-100 shadow-sm border-0 bg-light rounded-4">
+
+                            <!-- Imagen del Producto con Efecto Hover -->
+                            <div class="ratio ratio-4x3 overflow-hidden">
                                 <img src="{{ asset('storage/' . $product->image) }}"
-                                    class="card-img-top img-fluid rounded-top-4" alt="{{ $product->nombre }}"
+                                    class="card-img-top img-fluid rounded-top-4 product-image" alt="{{ $product->nombre }}"
                                     loading="lazy">
                             </div>
 
+
                             <!-- Contenido de la Tarjeta -->
-                            <div class="card-body d-flex flex-column text-center">
-                                <!-- Nombre del Producto y Botón de Favorito alineados -->
+                            <div class="card-body d-flex flex-column text-c">
+                                <!-- Nombre del Producto y Botón de Favorito -->
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title fs-4 fw-bold text-brown m-0">{{ $product->nombre }}</h5>
+                                    <h5 class="card-title fs-5 fw-bold text-brown m-0">{{ $product->nombre }}</h5>
                                     <button class="btn-favorite border-0 bg-transparent fs-4 transition"
                                         data-product-id="{{ $product->id }}"
                                         data-favorited="{{ in_array($product->id, $favorites) ? 'true' : 'false' }}">
@@ -100,9 +129,12 @@
                                 </div>
 
 
+                                <!-- Descripción corta -->
+                                <p class="card-text small text-muted">{{ Str::limit($product->description, 80) }}</p>
 
-                                <p class="card-text small text-muted">{{ Str::limit($product->description, 50) }}</p>
-                                <span class="badge bg-warning text-dark fs-5 py-2 px-3 mb-2">
+
+                                <!-- Precio con efecto de descuento -->
+                                <span class="price-badge text-center">
                                     @if ($product->precio_descuento)
                                         <span class="text-danger text-decoration-line-through">
                                             {{ number_format($product->precio, 2) }} €
@@ -114,9 +146,9 @@
                                 </span>
 
 
-
+                                <!-- Botón de Añadir al Carrito Mejorado -->
                                 <div class="mt-auto">
-                                    <button class="btn btn-warning text-white w-100 add-to-cart rounded-pill shadow-sm"
+                                    <button class="btn btn-gradient text-white w-100 add-to-cart rounded-pill shadow-sm"
                                         data-id="{{ $product->id }}"
                                         aria-label="Agregar {{ $product->nombre }} al carrito">
                                         <i class="fas fa-cart-plus"></i> Añadir al carrito
@@ -131,12 +163,13 @@
 
 
 
-        <!-- Toast de Notificación -->
+        <!-- Toast de Notificación Mejorado -->
         <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="cart-toast" class="toast bg-warning text-white align-items-center" role="alert" aria-live="assertive"
+            <div id="cart-toast" class="toast align-items-center text-white  shadow-lg" role="alert" aria-live="assertive"
                 aria-atomic="true">
                 <div class="d-flex">
-                    <div class="toast-body">
+                    <div class="toast-body d-flex align-items-center">
+                        <i class="fas fa-check-circle me-2"></i>
                         ¡Galleta agregada al carrito! 🍪
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
@@ -164,9 +197,11 @@
                 }, 300); // Espera a que el collapse termine su animación
             }
 
+
             // Escuchar los eventos de Bootstrap Collapse para ajustar el margen dinámicamente
             filterPanel.addEventListener("shown.bs.collapse", adjustMargin);
             filterPanel.addEventListener("hidden.bs.collapse", adjustMargin);
+
 
             // Lógica del carrito
             const buttons = document.querySelectorAll('.add-to-cart');
