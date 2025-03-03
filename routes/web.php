@@ -42,20 +42,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 /*
-|--------------------------------------------------------------------------
+|---------------------------------------------------------------------------
 | RUTAS SOLO ADMIN
-|--------------------------------------------------------------------------
+|---------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'verified', 'role:1'])->prefix('admin')->group(function () {
-    Route::get('/panel', [AdminController::class, 'indexPanel'])->name('admin.panel');
-    Route::resource('users', UserController::class);
-    Route::resource('products', ProductController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('brands', BrandController::class);
-    Route::resource('orders', OrderController::class)->except(['store']);
-    Route::resource('discounts', DiscountController::class);
-    Route::patch('/discounts/toggle/{id}', [DiscountController::class, 'toggleStatus'])->name('discounts.toggle');
-});
+use App\Http\Middleware\RoleMiddleware;
+
+Route::middleware(['auth', 'verified', RoleMiddleware::class . ':1'])
+    ->prefix('admin')
+    ->group(function () {
+        Route::get('/panel', [AdminController::class, 'indexPanel'])->name('admin.panel');
+        Route::resource('users', UserController::class);
+        Route::resource('products', ProductController::class);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('brands', BrandController::class);
+        Route::resource('orders', OrderController::class)->except(['store']);
+        Route::resource('discounts', DiscountController::class);
+        Route::patch('/discounts/toggle/{id}', [DiscountController::class, 'toggleStatus'])->name('discounts.toggle');
+    });
+
 
 /*
 |--------------------------------------------------------------------------

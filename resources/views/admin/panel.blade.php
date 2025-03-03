@@ -28,7 +28,7 @@
 
                 <!-- Pedidos -->
                 <div class="col-md-4">
-                    <a href="{{ route('orders') }}"
+                    <a href="{{ route('orders.index') }}"
                         class="btn btn-outline-secondary w-100 py-4 rounded-4 shadow-sm d-flex flex-column align-items-center">
                         <i class="fa-solid fa-truck fa-2x mb-2"></i>
                         <span class="fw-bold fs-5">Pedidos</span>
