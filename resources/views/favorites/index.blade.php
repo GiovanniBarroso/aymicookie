@@ -33,7 +33,7 @@
                     <div class="col">
                         <div class="card product-card h-100 shadow-sm border-0 bg-light rounded-4">
                             <!-- 📸 Imagen del producto -->
-                            <div class="ratio ratio-4x3 overflow-hidden">
+                            <div class="ratio ratio-1x1 overflow-hidden">
                                 <img src="{{ asset('storage/' . $favorite->product->image) }}"
                                     class="card-img-top img-fluid rounded-top-4 product-image"
                                     alt="{{ $favorite->product->nombre }}" loading="lazy">
